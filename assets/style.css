@@ -1,0 +1,91 @@
+body {
+    min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: purple;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100%;
+    background-color: lightblue;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 5px 20px 20px;
+    z-index: 100;
+}
+
+.sidebar-header {
+    padding-bottom: 5px;
+}
+
+.scrollbox {
+    overflow: auto;
+    padding-right: 10px;
+    visibility: hidden;
+}
+
+.scrollbox-inner {
+    display: flex;
+    flex-direction: column;
+}
+
+.scrollbox-inner,
+.scrollbox:hover {
+    visibility: visible;
+}
+
+.sidebar-list {
+    list-style: none;
+    margin: 10px 0 60px;
+
+}
+
+.sidebar-list-element {
+    cursor: pointer;
+    padding: 25px 0;
+
+}
+
+.sidebar-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    height: 60px;
+    padding-left: 20px;
+    background-color: lightblue;
+
+}
+
+.main-content {
+    position: relative;
+    width: calc(100% - 300px);
+    min-height: 100vh;
+    left: 300px;
+    background-color: lightcoral;
+    display: flex;
+
+}
+
+.main-card {
+    background-color: lightcyan;
+    margin: 50px auto;
+}
+
+.content h2 {
+    margin: auto;
+}
