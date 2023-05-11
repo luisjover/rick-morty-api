@@ -10,25 +10,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 window.addEventListener("load", setMain);
 function setMain() {
-    const sideMenu = document.querySelector("#side-menu");
-    const episodeList = document.createElement("ul");
-    episodeList.classList.add("sidebar-list");
-    const sideFooter = document.querySelector("#sidebar-footer");
-    const footerBtn = document.createElement("button");
-    footerBtn.innerText = "Load more episodes";
-    sideFooter === null || sideFooter === void 0 ? void 0 : sideFooter.appendChild(footerBtn);
-    let counter = 1;
-    for (let i = 0; i < 20; i++) {
-        const episode = document.createElement("li");
-        episode.classList.add("sidebar-list-element");
-        episode.innerText = `Episode ${counter}`;
-        episode.setAttribute("episode", `${counter}`);
-        episode.addEventListener("click", showEpisode);
-        episodeList.appendChild(episode);
-        sideMenu === null || sideMenu === void 0 ? void 0 : sideMenu.appendChild(episodeList);
-        counter++;
-    }
-    ;
+    return __awaiter(this, void 0, void 0, function* () {
+        const sideMenu = document.querySelector("#side-menu");
+        const episodeList = document.createElement("ul");
+        episodeList.classList.add("sidebar-list");
+        const sideFooter = document.querySelector("#sidebar-footer");
+        const footerBtn = document.createElement("button");
+        footerBtn.innerText = "Load more episodes";
+        sideFooter === null || sideFooter === void 0 ? void 0 : sideFooter.appendChild(footerBtn);
+        const response = yield fetch("https://rickandmortyapi.com/api/episode");
+        const data = yield response.json();
+        const episodes = data.results;
+        episodes.forEach((episode) => __awaiter(this, void 0, void 0, function* () {
+            const li = document.createElement("li");
+            li.classList.add("sidebar-list-element");
+            li.innerText = `${episode.id} - ${episode.name}`;
+            li.setAttribute("episode", `${episode.id}`);
+            li.addEventListener("click", showEpisode);
+            episodeList.appendChild(li);
+            sideMenu === null || sideMenu === void 0 ? void 0 : sideMenu.appendChild(episodeList);
+        }));
+    });
 }
 function showEpisode(event) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -49,7 +51,6 @@ function showEpisode(event) {
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(cardsContainer);
         const episodeCharactersURL = episodeData.characters;
         episodeCharactersURL.forEach((endpoint) => __awaiter(this, void 0, void 0, function* () {
-            console.log("dentro de foreach");
             const response = yield fetch(endpoint);
             const characterData = yield response.json();
             const cardWrapper = document.createElement("div");

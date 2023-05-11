@@ -1,6 +1,9 @@
+
+//import { Character } from "./types"
+
 window.addEventListener("load", setMain);
 
-function setMain() {
+async function setMain() {
     const sideMenu = document.querySelector("#side-menu");
     const episodeList = document.createElement("ul");
     episodeList.classList.add("sidebar-list")
@@ -8,25 +11,36 @@ function setMain() {
     const footerBtn = document.createElement("button");
     footerBtn.innerText = "Load more episodes";
     sideFooter?.appendChild(footerBtn);
-    let counter = 1;
 
 
-    for (let i = 0; i < 20; i++) {
 
-        const episode = document.createElement("li")
-        episode.classList.add("sidebar-list-element")
-        episode.innerText = `Episode ${counter}`
-        episode.setAttribute("episode", `${counter}`)
-        episode.addEventListener("click", showEpisode);
-        episodeList.appendChild(episode)
+    const response = await fetch("https://rickandmortyapi.com/api/episode")
+    const data = await response.json()
+
+    const episodes = data.results
+
+
+    episodes.forEach(async (episode: any) => {
+        const li = document.createElement("li")
+        li.classList.add("sidebar-list-element")
+        li.innerText = `${episode.id} - ${episode.name}`
+        li.setAttribute("episode", `${episode.id}`)
+        li.addEventListener("click", showEpisode);
+        episodeList.appendChild(li)
         sideMenu?.appendChild(episodeList)
-        counter++
+    });
+
+    /*for (let i = 0; i < 20; i++) {
+
+        
+        
 
 
-    };
+    };*/
 }
 
 async function showEpisode(event: any) {
+    //console.log(typeof event)
     const episodeSelected = event.target
     const episodeNumber = episodeSelected.getAttribute("episode")
 
@@ -48,8 +62,6 @@ async function showEpisode(event: any) {
     mainContent?.appendChild(cardsContainer)
     const episodeCharactersURL = episodeData.characters
     episodeCharactersURL.forEach(async (endpoint: string) => {
-
-        console.log("dentro de foreach")
 
         const response = await fetch(endpoint)
         const characterData = await response.json()
@@ -88,4 +100,3 @@ async function showEpisode(event: any) {
 
 
 }
-
