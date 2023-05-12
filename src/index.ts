@@ -1,5 +1,6 @@
 
-//import { Character } from "./types"
+import { Character, episode, location } from "./types"
+//import { Character } from "./classes"
 
 window.addEventListener("load", setMain);
 
@@ -11,6 +12,9 @@ async function setMain() {
     const footerBtn = document.createElement("button");
     footerBtn.innerText = "Load more episodes";
     sideFooter?.appendChild(footerBtn);
+
+
+
 
 
 
@@ -29,31 +33,25 @@ async function setMain() {
         episodeList.appendChild(li)
         sideMenu?.appendChild(episodeList)
     });
-
-    /*for (let i = 0; i < 20; i++) {
-
-        
-        
-
-
-    };*/
 }
 
 async function showEpisode(event: any) {
     //console.log(typeof event)
+    console.log(event.target)
     const episodeSelected = event.target
     const episodeNumber = episodeSelected.getAttribute("episode")
 
     const mainContent = document.querySelector("#main-card")
 
+
     const response = await fetch(`https://rickandmortyapi.com/api/episode/${episodeNumber}`)
     const episodeData = await response.json()
 
     const episodeTitle = document.createElement("h2")
-    episodeTitle.innerText = `Episode ${episodeNumber}`
+    episodeTitle.innerText = `${episodeNumber} - ${episodeData.name}`
     const episodeInfo = document.createElement("p")
     episodeInfo.innerText = `${episodeData.air_date} | ${episodeData.episode}`
-    mainContent?.replaceChildren()
+    cleanMain()
     mainContent?.appendChild(episodeTitle)
     mainContent?.appendChild(episodeInfo)
 
@@ -65,6 +63,7 @@ async function showEpisode(event: any) {
 
         const response = await fetch(endpoint)
         const characterData = await response.json()
+        const characterId = characterData.id
 
         const cardWrapper = document.createElement("div");
         cardWrapper.classList.add("card-wrapper", "col");
@@ -72,7 +71,9 @@ async function showEpisode(event: any) {
 
         const card = document.createElement("div");
         card.classList.add("card", "px-0", "h-100");
-        //card.style = "width: 18rem;";
+        card.setAttribute("characterId", characterId)
+        card.addEventListener("click", showCharacter);
+
 
         //INTERESTING
         card.setAttribute("role", "button");
@@ -97,6 +98,108 @@ async function showEpisode(event: any) {
         cardDetails.innerText = `${characterData.species} | ${characterData.status}`
         cardBody.appendChild(cardDetails);
     });
+}
+
+async function showCharacter(event: any) {
+    cleanMain()
+
+    const selectedCharacter = event.currentTarget;
+    const selectedCharacterId = selectedCharacter.getAttribute("characterId")
 
 
+    const response = await fetch(`https://rickandmortyapi.com/api/character/${selectedCharacterId}`)
+    const characterData: Character = await response.json()
+
+    /*const character: Character = new Character(characterData.id, characterData.name, characterData.status, characterData.species, characterData.type, characterData.gender, characterData.origin, characterData.location, characterData.image, characterData.episode, characterData.created)*/
+
+
+    const id = characterData.id
+    const name = characterData.name
+    const status = characterData.status
+    const specie = characterData.species
+    const gender = characterData.gender
+    const origin = characterData.origin.name
+    const originUrl = characterData.origin.url
+    const location = characterData.location.name
+    const locationUrl = characterData.location.url
+    const imgSrc = characterData.image
+    const episodeList = characterData.episode
+
+
+
+
+
+    const mainContent = document.querySelector("#main-card")
+
+    const characterHeader = document.createElement("div")
+    characterHeader.classList.add("row", "g-3")
+
+    const characterBody = document.createElement("div")
+    characterBody.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-3", "row-cols-xl-4", "g-3")
+
+    mainContent?.appendChild(characterHeader);
+    mainContent?.appendChild(characterBody);
+
+
+    const img = document.createElement("img")
+    img.src = imgSrc;
+    img.classList.add("character-main-img", "col-12", "col-sm-12", "col-md-3", "col-lg-3", "col-xl-3")
+
+    const characterInfo = document.createElement("div")
+    characterInfo.classList.add("col-12", "col-sm-12", "col-md-9", "col-lg-9", "col-xl-9")
+
+    const characterTitle = document.createElement("h3")
+    characterTitle.innerText = name
+
+    const characterDetails = document.createElement("p")
+    characterDetails.innerText = `${specie} | ${status} | ${gender} | ${origin}`
+
+    characterHeader.appendChild(img)
+    characterHeader.appendChild(characterInfo)
+    characterInfo.appendChild(characterTitle)
+    characterInfo.appendChild(characterDetails)
+
+    episodeList.forEach(async (endpoint) => {
+
+        const response = await fetch(endpoint)
+        const episodeData: episode = await response.json()
+
+        const episodeContainer = document.createElement("div")
+        episodeContainer.classList.add("col")
+        const title = document.createElement("h4")
+        const code = document.createElement("p")
+
+        title.innerText = episodeData.name
+        title.setAttribute("episode", `${episodeData.id}`)
+        code.innerText = episodeData.episode
+
+        title.addEventListener("click", showEpisode)
+
+        episodeContainer.appendChild(title)
+        episodeContainer.appendChild(code)
+        characterBody.appendChild(episodeContainer)
+    });
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//MINOR FUNCTIONS
+
+function cleanMain() {
+    const mainContent = document.querySelector("#main-card")
+    mainContent?.replaceChildren()
 }
