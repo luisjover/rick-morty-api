@@ -4,25 +4,22 @@ import { Character, episode, location } from "./types"
 
 window.addEventListener("load", setMain);
 
+//IN CHARGE OF PRINTIN THE FIRST MENU AND SIDEBAR MENU
 async function setMain() {
     const sideMenu = document.querySelector("#side-menu");
     const episodeList = document.createElement("ul");
     episodeList.classList.add("sidebar-list")
     const sideFooter = document.querySelector("#sidebar-footer");
     const footerBtn = document.createElement("button");
+    footerBtn.classList.add("sidebar-footer-btn")
     footerBtn.innerText = "Load more episodes";
     sideFooter?.appendChild(footerBtn);
-
-
-
-
 
 
     const response = await fetch("https://rickandmortyapi.com/api/episode")
     const data = await response.json()
 
     const episodes = data.results
-
 
     episodes.forEach(async (episode: any) => {
         const li = document.createElement("li")
@@ -35,10 +32,12 @@ async function setMain() {
     });
 }
 
+
+//IN CHARGE OF SHOWING EPISODE ALWAYS REQUIRED ALONG THE PROGRAM BY READING "EPISODE" CUSTOM ATTRIBUTE
 async function showEpisode(event: any) {
     //console.log(typeof event)
-    console.log(event.target)
-    const episodeSelected = event.target
+    console.log(event.currentTarget)
+    const episodeSelected = event.currentTarget
     const episodeNumber = episodeSelected.getAttribute("episode")
 
     const mainContent = document.querySelector("#main-card")
@@ -56,7 +55,7 @@ async function showEpisode(event: any) {
     mainContent?.appendChild(episodeInfo)
 
     const cardsContainer = document.createElement("div")
-    cardsContainer.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-3", "row-cols-xl-4", "g-3")
+    cardsContainer.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-3", "row-cols-xl-4", "g-3", "cards-container")
     mainContent?.appendChild(cardsContainer)
     const episodeCharactersURL = episodeData.characters
     episodeCharactersURL.forEach(async (endpoint: string) => {
@@ -100,6 +99,9 @@ async function showEpisode(event: any) {
     });
 }
 
+
+
+//IN CHARGE OF SHOWING SINGLE CHARACTER AND DISPLAY ALL ITS INFORMATION 
 async function showCharacter(event: any) {
     cleanMain()
 
@@ -132,10 +134,10 @@ async function showCharacter(event: any) {
     const mainContent = document.querySelector("#main-card")
 
     const characterHeader = document.createElement("div")
-    characterHeader.classList.add("row", "g-3")
+    characterHeader.classList.add("row", "g-3", "character-header")
 
     const characterBody = document.createElement("div")
-    characterBody.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-3", "row-cols-xl-4", "g-3")
+    characterBody.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-2", "row-cols-xl-4", "g-3", "character-body")
 
     mainContent?.appendChild(characterHeader);
     mainContent?.appendChild(characterBody);
@@ -143,12 +145,12 @@ async function showCharacter(event: any) {
 
     const img = document.createElement("img")
     img.src = imgSrc;
-    img.classList.add("character-main-img", "col-12", "col-sm-12", "col-md-3", "col-lg-3", "col-xl-3")
+    img.classList.add("character-main-img", "col-12", "col-sm-12", "col-md-4", "col-lg-3", "col-xl-2")
 
     const characterInfo = document.createElement("div")
-    characterInfo.classList.add("col-12", "col-sm-12", "col-md-9", "col-lg-9", "col-xl-9")
+    characterInfo.classList.add("col-12", "col-sm-12", "col-md-7", "col-lg-8", "col-xl-9")
 
-    const characterTitle = document.createElement("h3")
+    const characterTitle = document.createElement("h2")
     characterTitle.innerText = name
 
     const characterDetails = document.createElement("p")
@@ -166,14 +168,17 @@ async function showCharacter(event: any) {
 
         const episodeContainer = document.createElement("div")
         episodeContainer.classList.add("col")
-        const title = document.createElement("h4")
+        episodeContainer.setAttribute("role", "button");
+        episodeContainer.setAttribute("episode", `${episodeData.id}`)
+        episodeContainer.addEventListener("click", showEpisode);
+
+        const title = document.createElement("h5")
         const code = document.createElement("p")
 
         title.innerText = episodeData.name
-        title.setAttribute("episode", `${episodeData.id}`)
         code.innerText = episodeData.episode
 
-        title.addEventListener("click", showEpisode)
+
 
         episodeContainer.appendChild(title)
         episodeContainer.appendChild(code)
@@ -181,17 +186,6 @@ async function showCharacter(event: any) {
     });
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -15,6 +15,7 @@ function setMain() {
         episodeList.classList.add("sidebar-list");
         const sideFooter = document.querySelector("#sidebar-footer");
         const footerBtn = document.createElement("button");
+        footerBtn.classList.add("sidebar-footer-btn");
         footerBtn.innerText = "Load more episodes";
         sideFooter === null || sideFooter === void 0 ? void 0 : sideFooter.appendChild(footerBtn);
         const response = yield fetch("https://rickandmortyapi.com/api/episode");
@@ -33,8 +34,8 @@ function setMain() {
 }
 function showEpisode(event) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(event.target);
-        const episodeSelected = event.target;
+        console.log(event.currentTarget);
+        const episodeSelected = event.currentTarget;
         const episodeNumber = episodeSelected.getAttribute("episode");
         const mainContent = document.querySelector("#main-card");
         const response = yield fetch(`https://rickandmortyapi.com/api/episode/${episodeNumber}`);
@@ -47,7 +48,7 @@ function showEpisode(event) {
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(episodeTitle);
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(episodeInfo);
         const cardsContainer = document.createElement("div");
-        cardsContainer.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-3", "row-cols-xl-4", "g-3");
+        cardsContainer.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-3", "row-cols-xl-4", "g-3", "cards-container");
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(cardsContainer);
         const episodeCharactersURL = episodeData.characters;
         episodeCharactersURL.forEach((endpoint) => __awaiter(this, void 0, void 0, function* () {
@@ -101,17 +102,17 @@ function showCharacter(event) {
         const episodeList = characterData.episode;
         const mainContent = document.querySelector("#main-card");
         const characterHeader = document.createElement("div");
-        characterHeader.classList.add("row", "g-3");
+        characterHeader.classList.add("row", "g-3", "character-header");
         const characterBody = document.createElement("div");
-        characterBody.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-3", "row-cols-xl-4", "g-3");
+        characterBody.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-2", "row-cols-xl-4", "g-3", "character-body");
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(characterHeader);
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(characterBody);
         const img = document.createElement("img");
         img.src = imgSrc;
-        img.classList.add("character-main-img", "col-12", "col-sm-12", "col-md-3", "col-lg-3", "col-xl-3");
+        img.classList.add("character-main-img", "col-12", "col-sm-12", "col-md-4", "col-lg-3", "col-xl-2");
         const characterInfo = document.createElement("div");
-        characterInfo.classList.add("col-12", "col-sm-12", "col-md-9", "col-lg-9", "col-xl-9");
-        const characterTitle = document.createElement("h3");
+        characterInfo.classList.add("col-12", "col-sm-12", "col-md-7", "col-lg-8", "col-xl-9");
+        const characterTitle = document.createElement("h2");
         characterTitle.innerText = name;
         const characterDetails = document.createElement("p");
         characterDetails.innerText = `${specie} | ${status} | ${gender} | ${origin}`;
@@ -124,12 +125,13 @@ function showCharacter(event) {
             const episodeData = yield response.json();
             const episodeContainer = document.createElement("div");
             episodeContainer.classList.add("col");
-            const title = document.createElement("h4");
+            episodeContainer.setAttribute("role", "button");
+            episodeContainer.setAttribute("episode", `${episodeData.id}`);
+            episodeContainer.addEventListener("click", showEpisode);
+            const title = document.createElement("h5");
             const code = document.createElement("p");
             title.innerText = episodeData.name;
-            title.setAttribute("episode", `${episodeData.id}`);
             code.innerText = episodeData.episode;
-            title.addEventListener("click", showEpisode);
             episodeContainer.appendChild(title);
             episodeContainer.appendChild(code);
             characterBody.appendChild(episodeContainer);

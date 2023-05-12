@@ -1,5 +1,14 @@
 body {
     min-height: 100vh;
+    background-image: url(/images/bg-space-desktop.png);
+    background-size: cover;
+    background-attachment: fixed;
+
+
+}
+
+main {
+    display: grid;
 }
 
 ::-webkit-scrollbar {
@@ -24,12 +33,21 @@ body {
     background-color: lightblue;
     display: flex;
     flex-direction: column;
-    padding: 20px 5px 20px 20px;
+    padding: 0 4px;
     z-index: 100;
 }
 
 .sidebar-header {
-    padding-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    border-radius: 100px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    -ms-border-radius: 100px;
+    -o-border-radius: 100px;
+    background-color: black;
 }
 
 .scrollbox {
@@ -50,7 +68,7 @@ body {
 
 .sidebar-list {
     list-style: none;
-    margin: 10px 0 60px;
+
 
 }
 
@@ -61,14 +79,27 @@ body {
 }
 
 .sidebar-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 300px;
-    height: 60px;
-    padding-left: 20px;
-    background-color: lightblue;
 
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+
+
+    border-radius: 100px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    -ms-border-radius: 100px;
+    -o-border-radius: 100px;
+    background-color: black;
+
+
+}
+
+.sidebar-footer-btn {
+    justify-content: center;
 }
 
 .main-content {
@@ -76,20 +107,46 @@ body {
     width: calc(100% - 300px);
     min-height: 100vh;
     left: 300px;
-    background-color: lightcoral;
+    background-color: transparent;
     display: flex;
 
 }
 
 .main-card {
-    background-color: lightcyan;
+    background-color: transparent;
     margin: 50px auto;
+    padding: 40px;
 }
 
-.content h2 {
-    margin: auto;
+.cards-container {
+    margin-top: 50px;
 }
 
-character-main-img {
-    height: 200px
+.character-main-img {}
+
+.character-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+
+}
+
+character-body {}
+
+
+
+
+
+
+
+
+
+
+
+
+@media only screen and (max-width: 600px) {
+    body {
+        background-image: url(/images/bg-space-mobile.jpg);
+    }
 }
