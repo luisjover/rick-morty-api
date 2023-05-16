@@ -13,8 +13,12 @@ export type Character = {
     created: string,
 }
 
+export type Episodes = {
+    info: Info,
+    results: Episode[]
+}
 
-export type episode = {
+export type Episode = {
     id: number,
     name: string,
     air_date: string,
@@ -27,4 +31,22 @@ export type episode = {
 export type location = {
     name: string,
     url: String,
+}
+
+export type FullLocation = {
+    id: number,
+    name: string,
+    type: string,
+    dimension: string,
+    residents: string[],
+    url: string,
+    created: string
+}
+
+
+export type Info = {
+    count: number,
+    pages: number,
+    next: string | null,
+    prev: string | null
 }

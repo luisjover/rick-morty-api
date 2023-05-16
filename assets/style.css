@@ -1,9 +1,16 @@
+@font-face {
+
+    font-family: rickymorty;
+
+    src: url(/fonts/get_schwifty.ttf);
+
+}
+
 body {
     min-height: 100vh;
     background-image: url(/images/bg-space-desktop.png);
     background-size: cover;
     background-attachment: fixed;
-
 
 }
 
@@ -30,11 +37,11 @@ main {
     left: 0;
     width: 300px;
     height: 100%;
-    background-color: lightblue;
+    background-color: transparent;
     display: flex;
     flex-direction: column;
     padding: 0 4px;
-    z-index: 100;
+
 }
 
 .sidebar-header {
@@ -47,13 +54,15 @@ main {
     -moz-border-radius: 100px;
     -ms-border-radius: 100px;
     -o-border-radius: 100px;
-    background-color: black;
+    background-color: transparent;
+
 }
 
 .scrollbox {
     overflow: auto;
     padding-right: 10px;
     visibility: hidden;
+
 }
 
 .scrollbox-inner {
@@ -80,29 +89,14 @@ main {
 
 .sidebar-footer {
 
-
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px 0;
-
-
-    border-radius: 100px;
-    -webkit-border-radius: 100px;
-    -moz-border-radius: 100px;
-    -ms-border-radius: 100px;
-    -o-border-radius: 100px;
-    background-color: black;
+    padding: 30px 0;
+    background-color: transparent;
 
 
 }
 
-.sidebar-footer-btn {
-    justify-content: center;
-}
 
-.main-content {
+.main-wrapper {
     position: relative;
     width: calc(100% - 300px);
     min-height: 100vh;
@@ -112,7 +106,7 @@ main {
 
 }
 
-.main-card {
+.main-content {
     background-color: transparent;
     margin: 50px auto;
     padding: 40px;
@@ -120,19 +114,28 @@ main {
 
 .cards-container {
     margin-top: 50px;
+    border: none;
 }
 
-.character-main-img {}
+.card {
+    border: none;
+}
+
 
 .character-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
+    border-bottom: 2px solid purple;
+    padding-bottom: 30px;
+    padding-left: 20px;
 
 }
 
-character-body {}
+.character-body {
+    padding-left: 20px;
+}
 
 
 

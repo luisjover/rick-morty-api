@@ -7,17 +7,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-window.addEventListener("load", setMain);
-function setMain() {
+window.addEventListener("load", setSidebar);
+function setSidebar() {
     return __awaiter(this, void 0, void 0, function* () {
+        const scrollBox = document.querySelector("#scroll-box");
         const sideMenu = document.querySelector("#side-menu");
         const episodeList = document.createElement("ul");
-        episodeList.classList.add("sidebar-list");
         const sideFooter = document.querySelector("#sidebar-footer");
-        const footerBtn = document.createElement("button");
-        footerBtn.classList.add("sidebar-footer-btn");
-        footerBtn.innerText = "Load more episodes";
-        sideFooter === null || sideFooter === void 0 ? void 0 : sideFooter.appendChild(footerBtn);
+        episodeList.classList.add("sidebar-list");
+        episodeList.id = "sidebar-list";
+        scrollBox === null || scrollBox === void 0 ? void 0 : scrollBox.addEventListener("scroll", infiniteScroll);
         const response = yield fetch("https://rickandmortyapi.com/api/episode");
         const data = yield response.json();
         const episodes = data.results;
@@ -32,115 +31,180 @@ function setMain() {
         }));
     });
 }
-function showEpisode(event) {
+function showEpisode() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(event.currentTarget);
-        const episodeSelected = event.currentTarget;
-        const episodeNumber = episodeSelected.getAttribute("episode");
-        const mainContent = document.querySelector("#main-card");
+        cleanMain();
+        const episodeNumber = this.getAttribute("episode");
+        const mainContent = document.querySelector("#main-content");
         const response = yield fetch(`https://rickandmortyapi.com/api/episode/${episodeNumber}`);
         const episodeData = yield response.json();
         const episodeTitle = document.createElement("h2");
-        episodeTitle.innerText = `${episodeNumber} - ${episodeData.name}`;
         const episodeInfo = document.createElement("p");
+        const charactersURL = episodeData.characters;
+        episodeTitle.innerText = `${episodeNumber} - ${episodeData.name}`;
         episodeInfo.innerText = `${episodeData.air_date} | ${episodeData.episode}`;
-        cleanMain();
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(episodeTitle);
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(episodeInfo);
+        printCharacters(charactersURL);
+    });
+}
+function showCharacter() {
+    return __awaiter(this, void 0, void 0, function* () {
+        cleanMain();
+        const selectedCharacterId = this.getAttribute("characterId");
+        const response = yield fetch(`https://rickandmortyapi.com/api/character/${selectedCharacterId}`);
+        const characterData = yield response.json();
+        const origin = characterData.origin.name;
+        const originUrl = characterData.origin.url;
+        const episodeList = characterData.episode;
+        const mainContent = document.querySelector("#main-content");
+        const characterHeader = document.createElement("div");
+        const characterBody = document.createElement("div");
+        const img = document.createElement("img");
+        const characterInfo = document.createElement("div");
+        const characterTitle = document.createElement("h2");
+        const characterDetails = document.createElement("p");
+        const clickableSpan = document.createElement("span");
+        characterHeader.classList.add("row", "g-3", "character-header");
+        mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(characterHeader);
+        img.classList.add("character-main-img", "col-12", "col-sm-12", "col-md-4", "col-lg-3", "col-xl-2");
+        img.src = characterData.image;
+        characterHeader.appendChild(img);
+        characterInfo.classList.add("col-12", "col-sm-12", "col-md-7", "col-lg-8", "col-xl-9");
+        characterTitle.innerText = characterData.name;
+        characterDetails.innerText = `${characterData.species} | ${characterData.status} | ${characterData.gender} | `;
+        clickableSpan.innerText = `${origin}`;
+        clickableSpan.setAttribute("originUrl", `${originUrl}`);
+        characterHeader.appendChild(characterInfo);
+        characterInfo.appendChild(characterTitle);
+        characterInfo.appendChild(characterDetails);
+        characterDetails.appendChild(clickableSpan);
+        clickableSpan.addEventListener("click", showOrigin);
+        characterBody.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-2", "row-cols-xl-4", "g-3", "character-body");
+        mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(characterBody);
+        episodeList.forEach((endpoint) => __awaiter(this, void 0, void 0, function* () {
+            const response = yield fetch(endpoint);
+            const episodeData = yield response.json();
+            const episodeContainer = document.createElement("div");
+            const title = document.createElement("h5");
+            const code = document.createElement("p");
+            episodeContainer.classList.add("col");
+            episodeContainer.setAttribute("role", "button");
+            episodeContainer.setAttribute("episode", `${episodeData.id}`);
+            episodeContainer.addEventListener("click", showEpisode);
+            title.innerText = episodeData.name;
+            episodeContainer.appendChild(title);
+            code.innerText = episodeData.episode;
+            episodeContainer.appendChild(code);
+            characterBody.appendChild(episodeContainer);
+        }));
+    });
+}
+function showOrigin() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const originUrl = this.getAttribute("originUrl");
+        if (originUrl === "")
+            return;
+        const mainContent = document.querySelector("#main-content");
+        cleanMain();
+        const response = yield fetch(`${originUrl}`);
+        const originData = yield response.json();
+        const originName = originData.name;
+        const type = originData.type;
+        const dimension = originData.dimension;
+        const residents = originData.residents;
+        const title = document.createElement("h2");
+        const originInfo = document.createElement("p");
+        title.innerText = `${originName}`;
+        originInfo.innerText = `${type} | ${dimension}`;
+        mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(title);
+        mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(originInfo);
+        printCharacters(residents);
+    });
+}
+function printCharacters(charactersUrl) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const mainContent = document.querySelector("#main-content");
         const cardsContainer = document.createElement("div");
         cardsContainer.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-3", "row-cols-xl-4", "g-3", "cards-container");
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(cardsContainer);
-        const episodeCharactersURL = episodeData.characters;
-        episodeCharactersURL.forEach((endpoint) => __awaiter(this, void 0, void 0, function* () {
+        charactersUrl.forEach((endpoint) => __awaiter(this, void 0, void 0, function* () {
             const response = yield fetch(endpoint);
             const characterData = yield response.json();
             const characterId = characterData.id;
             const cardWrapper = document.createElement("div");
-            cardWrapper.classList.add("card-wrapper", "col");
-            cardsContainer.appendChild(cardWrapper);
             const card = document.createElement("div");
-            card.classList.add("card", "px-0", "h-100");
-            card.setAttribute("characterId", characterId);
-            card.addEventListener("click", showCharacter);
-            card.setAttribute("role", "button");
-            cardWrapper.appendChild(card);
             const img = document.createElement("img");
+            const cardBody = document.createElement("div");
+            const cardTitle = document.createElement("h5");
+            const cardDetails = document.createElement("p");
+            cardsContainer.appendChild(cardWrapper);
+            cardWrapper.classList.add("card-wrapper", "col", "text-dark");
+            cardWrapper.appendChild(card);
+            card.classList.add("card", "px-0", "h-100");
+            card.setAttribute("characterId", `${characterId}`);
+            card.setAttribute("role", "button");
+            card.addEventListener("click", showCharacter);
             img.classList.add("card-img-top");
             img.src = characterData.image;
             card.appendChild(img);
-            const cardBody = document.createElement("div");
             cardBody.classList.add("card-body");
             card.appendChild(cardBody);
-            const cardTitle = document.createElement("h5");
             cardTitle.classList.add("card-title");
             cardTitle.innerText = characterData.name;
             cardBody.appendChild(cardTitle);
-            const cardDetails = document.createElement("p");
             cardDetails.classList.add("card-text");
             cardDetails.innerText = `${characterData.species} | ${characterData.status}`;
             cardBody.appendChild(cardDetails);
         }));
     });
 }
-function showCharacter(event) {
-    return __awaiter(this, void 0, void 0, function* () {
-        cleanMain();
-        const selectedCharacter = event.currentTarget;
-        const selectedCharacterId = selectedCharacter.getAttribute("characterId");
-        const response = yield fetch(`https://rickandmortyapi.com/api/character/${selectedCharacterId}`);
-        const characterData = yield response.json();
-        const id = characterData.id;
-        const name = characterData.name;
-        const status = characterData.status;
-        const specie = characterData.species;
-        const gender = characterData.gender;
-        const origin = characterData.origin.name;
-        const originUrl = characterData.origin.url;
-        const location = characterData.location.name;
-        const locationUrl = characterData.location.url;
-        const imgSrc = characterData.image;
-        const episodeList = characterData.episode;
-        const mainContent = document.querySelector("#main-card");
-        const characterHeader = document.createElement("div");
-        characterHeader.classList.add("row", "g-3", "character-header");
-        const characterBody = document.createElement("div");
-        characterBody.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-2", "row-cols-xl-4", "g-3", "character-body");
-        mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(characterHeader);
-        mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(characterBody);
-        const img = document.createElement("img");
-        img.src = imgSrc;
-        img.classList.add("character-main-img", "col-12", "col-sm-12", "col-md-4", "col-lg-3", "col-xl-2");
-        const characterInfo = document.createElement("div");
-        characterInfo.classList.add("col-12", "col-sm-12", "col-md-7", "col-lg-8", "col-xl-9");
-        const characterTitle = document.createElement("h2");
-        characterTitle.innerText = name;
-        const characterDetails = document.createElement("p");
-        characterDetails.innerText = `${specie} | ${status} | ${gender} | ${origin}`;
-        characterHeader.appendChild(img);
-        characterHeader.appendChild(characterInfo);
-        characterInfo.appendChild(characterTitle);
-        characterInfo.appendChild(characterDetails);
-        episodeList.forEach((endpoint) => __awaiter(this, void 0, void 0, function* () {
-            const response = yield fetch(endpoint);
-            const episodeData = yield response.json();
-            const episodeContainer = document.createElement("div");
-            episodeContainer.classList.add("col");
-            episodeContainer.setAttribute("role", "button");
-            episodeContainer.setAttribute("episode", `${episodeData.id}`);
-            episodeContainer.addEventListener("click", showEpisode);
-            const title = document.createElement("h5");
-            const code = document.createElement("p");
-            title.innerText = episodeData.name;
-            code.innerText = episodeData.episode;
-            episodeContainer.appendChild(title);
-            episodeContainer.appendChild(code);
-            characterBody.appendChild(episodeContainer);
-        }));
-    });
-}
 function cleanMain() {
-    const mainContent = document.querySelector("#main-card");
+    const mainContent = document.querySelector("#main-content");
     mainContent === null || mainContent === void 0 ? void 0 : mainContent.replaceChildren();
+}
+function infiniteScroll(event) {
+    event.preventDefault();
+    const scrollBox = document.querySelector("#scroll-box");
+    if (scrollBox === null)
+        return;
+    const scrollTop = scrollBox.scrollTop;
+    const scrollHeight = scrollBox.scrollHeight;
+    const clientHeight = scrollBox.clientHeight;
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
+        refreshSidebar();
+    }
+    ;
+}
+function refreshSidebar() {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log("entering function");
+        const scrollBox = document.querySelector("#scroll-box");
+        const sideList = document.querySelector("#sidebar-list");
+        let url = "";
+        if ((sideList === null || sideList === void 0 ? void 0 : sideList.childElementCount) === 20) {
+            url = "https://rickandmortyapi.com/api/episode?page=2";
+        }
+        else if ((sideList === null || sideList === void 0 ? void 0 : sideList.childElementCount) === 40) {
+            url = "https://rickandmortyapi.com/api/episode?page=3";
+        }
+        else {
+            scrollBox === null || scrollBox === void 0 ? void 0 : scrollBox.removeEventListener("scroll", infiniteScroll);
+            return;
+        }
+        const response = yield fetch(url);
+        const data = yield response.json();
+        console.log("if passed");
+        const episodes = data.results;
+        episodes.forEach(episode => {
+            const li = document.createElement("li");
+            li.classList.add("sidebar-list-element");
+            li.innerText = `${episode.id} - ${episode.name}`;
+            li.setAttribute("episode", `${episode.id}`);
+            li.addEventListener("click", showEpisode);
+            sideList === null || sideList === void 0 ? void 0 : sideList.appendChild(li);
+        });
+    });
 }
 export {};
 //# sourceMappingURL=index.js.map
