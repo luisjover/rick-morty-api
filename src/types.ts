@@ -13,9 +13,14 @@ export type Character = {
     created: string,
 }
 
-export type Episodes = {
-    info: Info,
-    results: Episode[]
+export type FullLocation = {
+    id: number,
+    name: string,
+    type: string,
+    dimension: string,
+    residents: string[],
+    url: string,
+    created: string
 }
 
 export type Episode = {
@@ -28,20 +33,17 @@ export type Episode = {
     created: string,
 }
 
+export type Episodes = {
+    info: Info,
+    results: Episode[]
+}
+
+
 export type location = {
     name: string,
     url: String,
 }
 
-export type FullLocation = {
-    id: number,
-    name: string,
-    type: string,
-    dimension: string,
-    residents: string[],
-    url: string,
-    created: string
-}
 
 
 export type Info = {

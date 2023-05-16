@@ -1,7 +1,6 @@
 
-
 import { Character, Episodes, Episode, FullLocation } from "./types"
-//import { Character } from "./classes"
+import { getEpisodes, getSingleEpisode, getCharacter, getLocation } from "./APIrequests.js";
 
 window.addEventListener("load", setSidebar);
 
@@ -20,12 +19,11 @@ async function setSidebar() {
     scrollBox?.addEventListener("scroll", infiniteScroll)
 
 
-    const response = await fetch("https://rickandmortyapi.com/api/episode")
-    const data: Episodes = await response.json()
 
+    const data = await getEpisodes()
     const episodes = data.results
 
-    episodes.forEach(async episode => {
+    episodes.forEach(episode => {
         const li = document.createElement("li")
         li.classList.add("sidebar-list-element")
         li.innerText = `${episode.id} - ${episode.name}`
@@ -45,9 +43,8 @@ async function showEpisode(this: HTMLElement) {
     const episodeNumber = this.getAttribute("episode")
     const mainContent = document.querySelector("#main-content")
 
-
-    const response = await fetch(`https://rickandmortyapi.com/api/episode/${episodeNumber}`)
-    const episodeData: Episode = await response.json()
+    if (episodeNumber === null) return;
+    const episodeData = await getSingleEpisode(undefined, episodeNumber)
 
     const episodeTitle = document.createElement("h2")
     const episodeInfo = document.createElement("p")
@@ -67,9 +64,9 @@ async function showCharacter(this: HTMLElement) {
     cleanMain()
 
     const selectedCharacterId = this.getAttribute("characterId")
+    if (selectedCharacterId === null) return;
 
-    const response = await fetch(`https://rickandmortyapi.com/api/character/${selectedCharacterId}`)
-    const characterData: Character = await response.json()
+    const characterData = await getCharacter(undefined, selectedCharacterId)
 
     const origin = characterData.origin.name
     const originUrl = characterData.origin.url
@@ -106,8 +103,7 @@ async function showCharacter(this: HTMLElement) {
 
     episodeList.forEach(async endpoint => {
 
-        const response = await fetch(endpoint)
-        const episodeData: Episode = await response.json()
+        const episodeData = await getSingleEpisode(endpoint, undefined)
 
         const episodeContainer = document.createElement("div")
         const title = document.createElement("h5");
@@ -130,25 +126,24 @@ async function showCharacter(this: HTMLElement) {
 
 async function showOrigin(this: HTMLElement) {
 
+
     const originUrl = this.getAttribute("originUrl");
     if (originUrl === "") return;
+    if (originUrl === null) return;
 
     const mainContent = document.querySelector("#main-content")
 
     cleanMain();
 
-    const response = await fetch(`${originUrl}`);
-    const originData: FullLocation = await response.json();
+    const originData = await getLocation(originUrl)
 
-    const originName = originData.name
-    const type = originData.type
-    const dimension = originData.dimension
     const residents = originData.residents
+
     const title = document.createElement("h2")
     const originInfo = document.createElement("p")
 
-    title.innerText = `${originName}`
-    originInfo.innerText = `${type} | ${dimension}`
+    title.innerText = originData.name
+    originInfo.innerText = `${originData.type} | ${originData.dimension}`
 
     mainContent?.appendChild(title)
     mainContent?.appendChild(originInfo)
@@ -165,8 +160,7 @@ async function printCharacters(charactersUrl: string[]) {
 
     charactersUrl.forEach(async (endpoint: string) => {
 
-        const response = await fetch(endpoint)
-        const characterData: Character = await response.json()
+        const characterData = await getCharacter(endpoint, undefined)
         const characterId = characterData.id
         const cardWrapper = document.createElement("div");
         const card = document.createElement("div");
@@ -175,15 +169,14 @@ async function printCharacters(charactersUrl: string[]) {
         const cardTitle = document.createElement("h5");
         const cardDetails = document.createElement("p");
 
-        cardsContainer.appendChild(cardWrapper);
-
         cardWrapper.classList.add("card-wrapper", "col", "text-dark");
-        cardWrapper.appendChild(card);
+        cardsContainer.appendChild(cardWrapper);
 
         card.classList.add("card", "px-0", "h-100");
         card.setAttribute("characterId", `${characterId}`)
         card.setAttribute("role", "button");
         card.addEventListener("click", showCharacter);
+        cardWrapper.appendChild(card);
 
         img.classList.add("card-img-top");
         img.src = characterData.image;
@@ -213,7 +206,7 @@ function cleanMain() {
 
 function infiniteScroll(event: Event) {
 
-    event.preventDefault()
+    //event.preventDefault()
     const scrollBox = document.querySelector("#scroll-box") as HTMLElement | null;
     if (scrollBox === null) return;
 
@@ -233,17 +226,17 @@ async function refreshSidebar() {
     const scrollBox = document.querySelector("#scroll-box") as HTMLElement | null;
     const sideList = document.querySelector("#sidebar-list")
 
-    let url = ""
+    let pageFilterUrl = ""
     if (sideList?.childElementCount === 20) {
-        url = "https://rickandmortyapi.com/api/episode?page=2"
+        pageFilterUrl = "?page=2"
     } else if (sideList?.childElementCount === 40) {
-        url = "https://rickandmortyapi.com/api/episode?page=3"
+        pageFilterUrl = "?page=3"
     } else {
         scrollBox?.removeEventListener("scroll", infiniteScroll)
         return;
     }
-    const response = await fetch(url)
-    const data: Episodes = await response.json()
+
+    const data = await getEpisodes(undefined, pageFilterUrl)
 
     console.log("if passed")
     const episodes = data.results

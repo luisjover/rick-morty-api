@@ -23,7 +23,7 @@ main {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: purple;
+    background: #e89ac7;
     border-radius: 10px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -127,7 +127,7 @@ main {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
-    border-bottom: 2px solid purple;
+    border-bottom: 2px solid #e89ac7;
     padding-bottom: 30px;
     padding-left: 20px;
 
@@ -148,8 +148,21 @@ main {
 
 
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 650px) {
+
     body {
         background-image: url(/images/bg-space-mobile.jpg);
+    }
+
+    .sidebar {
+        display: none;
+
+    }
+
+    .main-wrapper {
+        left: 0;
+        width: 100%;
+
+
     }
 }
