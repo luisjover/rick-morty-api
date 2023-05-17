@@ -1,3 +1,7 @@
+import { showEpisode, showSeason } from "./principalFunctions.js";
+import { getSeasonsNumber } from "./supportFunctions.js";
+import { Episode } from "./types";
+
 
 
 export function createHeader(): void {
@@ -13,10 +17,10 @@ export function createHeader(): void {
     const scrollBoxInnerNav = document.createElement("div");
     const sidebarListNav = document.createElement("ul");
 
-    navBar.classList.add("navbar", "fixed-top", "navbar-expand-lg", "navbar-light", "main-navbar");
+    navBar.classList.add("navbar", "navbar-expand-lg", "navbar-light", "main-navbar");
     header?.appendChild(navBar);
 
-    container.classList.add("container-fluid");
+    container.classList.add("container-fluid", "header-container");
     navBar.appendChild(container);
 
     heading.classList.add("m-auto");
@@ -35,7 +39,7 @@ export function createHeader(): void {
     iconSpan.classList.add("navbar-toggler-icon");
     toggleButton.appendChild(iconSpan);
 
-    collapseNavbar.classList.add("collapse", "navbar-collapse");
+    collapseNavbar.classList.add("collapse", "navbar-collapse", "collapsable-container");
     collapseNavbar.id = "navbar-colapse";
     container.appendChild(collapseNavbar);
 
@@ -50,6 +54,25 @@ export function createHeader(): void {
     sidebarListNav.classList.add("sidebar-list");
     sidebarListNav.id = "sidebar-list-nav";
     scrollBoxInnerNav.appendChild(sidebarListNav);
+
+}
+
+export async function createSeasonsMenu() {
+    const episodeListNav = document.querySelector("#sidebar-list-nav")
+    const seasonsNumber = await getSeasonsNumber()
+    let i = 1;
+    while (i <= seasonsNumber) {
+        let iWithZero = ('0' + i).slice(-2);
+        const liNav = document.createElement("li")
+        liNav.classList.add("sidebar-list-element")
+        liNav.innerText = `SEASON - ${iWithZero}`
+        liNav.setAttribute("season", `${iWithZero}`)
+        liNav.addEventListener("click", showSeason);
+        episodeListNav?.appendChild(liNav);
+        i++;
+    }
+
+
 
 }
 
@@ -89,6 +112,17 @@ export function createSidebar() {
     sidebarFooter.id = "sidebar-footer";
     sidebar.appendChild(sidebarFooter);
 
+}
+
+export function createSideMenu(episode: Episode) {
+    const episodeList = document.querySelector("#sidebar-list")
+    if (episodeList === null) return
+    const li = document.createElement("li")
+    li.classList.add("sidebar-list-element")
+    li.innerText = `${episode.id} - ${episode.name}`
+    li.setAttribute("episode", `${episode.id}`)
+    li.addEventListener("click", showEpisode);
+    episodeList.appendChild(li)
 }
 
 

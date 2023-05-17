@@ -5,8 +5,8 @@ export type Character = {
     species: string,
     type: string,
     gender: string,
-    origin: location,
-    location: location,
+    origin: CharacterLocation,
+    location: CharacterLocation,
     image: string,
     episode: string[],
     url: string,
@@ -33,20 +33,20 @@ export type Episode = {
     created: string,
 }
 
-export type Episodes = {
-    info: Info,
+export type AllEpisodes = {
+    info: Information,
     results: Episode[]
 }
 
 
-export type location = {
+type CharacterLocation = {
     name: string,
-    url: String,
+    url: string,
 }
 
 
 
-export type Info = {
+type Information = {
     count: number,
     pages: number,
     next: string | null,

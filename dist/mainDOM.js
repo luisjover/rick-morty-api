@@ -7,8 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { showEpisode, showSeason } from "./principalFunctions.js";
-import { getSeasonsNumber } from "./supportFunc.js";
+import { showEpisode, showSeason } from "./principalFunctions";
+import { getSeasonsNumber } from "./supportFunctions";
 export function createHeader() {
     const header = document.querySelector("header");
     const navBar = document.createElement("nav");
@@ -117,4 +117,4 @@ export function createMainContainer() {
     mainContainer.id = "main-content";
     mainWrapper.appendChild(mainContainer);
 }
-//# sourceMappingURL=DOMmanipulation.js.map
+//# sourceMappingURL=mainDOM.js.map

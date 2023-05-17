@@ -32,8 +32,27 @@ main {
 }
 
 .main-navbar {
+    position: relative;
+    width: 100%;
     display: none;
-    background-color: rgba(151, 206, 76, .6)
+    background-color: rgba(151, 206, 76, .6);
+    padding: 15px 5px;
+    z-index: 1;
+}
+
+.header-container {}
+
+.collapsable-container {
+    position: absolute;
+    z-index: 9999;
+    top: 70px;
+    left: 0px;
+    overflow-y: auto;
+    max-height: 100vh;
+    background-color: rgba(151, 206, 76, .8);
+    width: 90%;
+
+    padding-right: 5px;
 }
 
 
@@ -75,6 +94,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+
 }
 
 .scrollbox-inner,
@@ -84,9 +104,6 @@ main {
 
 .sidebar-list {
     list-style: none;
-    background-color: #e89ac7;
-
-
 }
 
 .sidebar-list-element {
@@ -122,7 +139,11 @@ main {
 
 .cards-container {
     margin-top: 50px;
-    border: none;
+    border-top: 3px solid #e89ac7;
+    padding-top: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+
 }
 
 .card {
@@ -135,7 +156,7 @@ main {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
-    border-bottom: 2px solid #e89ac7;
+    border-bottom: 3px solid #e89ac7;
     padding-bottom: 30px;
     padding-left: 20px;
 
@@ -143,6 +164,16 @@ main {
 
 .character-body {
     padding-left: 20px;
+}
+
+.clickable-span {
+    cursor: pointer;
+}
+
+.clickable-span:hover,
+.sidebar-list-element:hover,
+.clickable-episode-title:hover {
+    color: #97ce4c;
 }
 
 
@@ -161,9 +192,23 @@ main {
         background-image: url(/images/bg-space-mobile.jpg);
     }
 
+    .main-navbar {
+        display: flex;
+    }
+
     .sidebar {
         display: none;
 
+    }
+
+    .scrollbox {
+        visibility: visible;
+
+    }
+
+    .sidebar-list {
+        list-style: none;
+        /*background-color: #e89ac7;*/
     }
 
     .main-wrapper {
@@ -172,7 +217,7 @@ main {
 
     }
 
-    .main-navbar {
-        display: flex;
-    }
+
+
+
 }

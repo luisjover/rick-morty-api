@@ -1,10 +1,10 @@
 
-import { Character, Episodes, Episode, FullLocation } from "./types"
+import { Character, AllEpisodes, Episode, FullLocation } from "./types"
 
 
-export async function getEpisodes(url: string = "https://rickandmortyapi.com/api/episode", filter: string = ""): Promise<Episodes> {
+export async function getEpisodes(url: string = "https://rickandmortyapi.com/api/episode", filter: string = ""): Promise<AllEpisodes> {
     const response = await fetch(`${url}${filter}`)
-    const data: Episodes = await response.json()
+    const data: AllEpisodes = await response.json()
     return data;
 }
 
