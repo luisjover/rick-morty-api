@@ -1,37 +1,48 @@
 
-import { Character, Episodes, Episode, FullLocation } from "./types"
 import { getEpisodes, getSingleEpisode, getCharacter, getLocation } from "./APIrequests.js";
+import { createHeader, createSidebar, createMainContainer } from "./DOMmanipulation.js";
 
-window.addEventListener("load", setSidebar);
+window.addEventListener("load", setMain);
 
-//IN CHARGE OF PRINTIN THE FIRST MENU AND SIDEBAR MENU
-async function setSidebar() {
+//IN CHARGE OF CREATE AND SHOW FIRST SIDEBAR AND COLLAPSABLE HEADER MENU AND PROPPERLY FULFILL;
+async function setMain(): Promise<void> {
+
+    createHeader();
+    createSidebar();
+    createMainContainer();
+
     const scrollBox = document.querySelector("#scroll-box")
-    const sideMenu = document.querySelector("#side-menu") as HTMLElement | null;
-    const episodeList = document.createElement("ul");
-    const sideFooter = document.querySelector("#sidebar-footer") as HTMLElement | null;
-    //const footerBtn = document.createElement("button");
-    episodeList.classList.add("sidebar-list")
-    episodeList.id = "sidebar-list"
-    //footerBtn.classList.add("sidebar-footer-btn")
-    //footerBtn.innerText = "Load more episodes";
-    //sideFooter?.appendChild(footerBtn);
+    const scrollBoxNav = document.querySelector("#scroll-box-nav")
+    const episodeList = document.querySelector("#sidebar-list")
+    const episodeListNav = document.querySelector("#sidebar-list-nav")
+    //const sideFooter = document.querySelector("#sidebar-footer") as HTMLElement | null;
+
     scrollBox?.addEventListener("scroll", infiniteScroll)
-
-
+    scrollBoxNav?.addEventListener("scroll", infiniteScroll)
 
     const data = await getEpisodes()
     const episodes = data.results
 
     episodes.forEach(episode => {
+
+        if (episodeList === null || episodeListNav === null) return
         const li = document.createElement("li")
+        const liNav = document.createElement("li")
         li.classList.add("sidebar-list-element")
+        liNav.classList.add("sidebar-list-element")
         li.innerText = `${episode.id} - ${episode.name}`
+        liNav.innerText = `${episode.id} - ${episode.name}`
         li.setAttribute("episode", `${episode.id}`)
+        liNav.setAttribute("episode", `${episode.id}`)
         li.addEventListener("click", showEpisode);
+        liNav.addEventListener("click", showEpisode);
         episodeList.appendChild(li)
-        sideMenu?.appendChild(episodeList)
+        episodeListNav.appendChild(liNav)
+
     });
+    sessionStorage.setItem("fetching", false.toString())
+    if (data.info.next !== null) sessionStorage.setItem("nextMenuPage", data.info.next)
+
 }
 
 
@@ -48,13 +59,13 @@ async function showEpisode(this: HTMLElement) {
 
     const episodeTitle = document.createElement("h2")
     const episodeInfo = document.createElement("p")
-    const charactersURL = episodeData.characters
+    const episodeCharacters = episodeData.characters
     episodeTitle.innerText = `${episodeNumber} - ${episodeData.name}`
     episodeInfo.innerText = `${episodeData.air_date} | ${episodeData.episode}`
     mainContent?.appendChild(episodeTitle)
     mainContent?.appendChild(episodeInfo)
 
-    printCharacters(charactersURL)
+    printCharacters(episodeCharacters)
 }
 
 
@@ -70,7 +81,8 @@ async function showCharacter(this: HTMLElement) {
 
     const origin = characterData.origin.name
     const originUrl = characterData.origin.url
-    const episodeList = characterData.episode
+    const characterEpisodes = characterData.episode
+
     const mainContent = document.querySelector("#main-content")
     const characterHeader = document.createElement("div")
     const characterBody = document.createElement("div")
@@ -88,44 +100,29 @@ async function showCharacter(this: HTMLElement) {
     characterHeader.appendChild(img)
 
     characterInfo.classList.add("col-12", "col-sm-12", "col-md-7", "col-lg-8", "col-xl-9")
+    characterHeader.appendChild(characterInfo)
+
     characterTitle.innerText = characterData.name
+    characterInfo.appendChild(characterTitle)
+
     characterDetails.innerText = `${characterData.species} | ${characterData.status} | ${characterData.gender} | `
+    characterInfo.appendChild(characterDetails)
+
     clickableSpan.innerText = `${origin}`
     clickableSpan.setAttribute("originUrl", `${originUrl}`)
-    characterHeader.appendChild(characterInfo)
-    characterInfo.appendChild(characterTitle)
-    characterInfo.appendChild(characterDetails)
-    characterDetails.appendChild(clickableSpan)
     clickableSpan.addEventListener("click", showOrigin)
+    characterDetails.appendChild(clickableSpan)
 
     characterBody.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-2", "row-cols-xl-4", "g-3", "character-body")
+    characterBody.id = "character-body";
     mainContent?.appendChild(characterBody);
 
-    episodeList.forEach(async endpoint => {
+    printEpisodes(characterEpisodes);
 
-        const episodeData = await getSingleEpisode(endpoint, undefined)
-
-        const episodeContainer = document.createElement("div")
-        const title = document.createElement("h5");
-        const code = document.createElement("p");
-
-        episodeContainer.classList.add("col")
-        episodeContainer.setAttribute("role", "button");
-        episodeContainer.setAttribute("episode", `${episodeData.id}`)
-        episodeContainer.addEventListener("click", showEpisode);
-
-        title.innerText = episodeData.name;
-        episodeContainer.appendChild(title);
-        code.innerText = episodeData.episode;
-        episodeContainer.appendChild(code);
-
-        characterBody.appendChild(episodeContainer);
-    });
 }
 
 
 async function showOrigin(this: HTMLElement) {
-
 
     const originUrl = this.getAttribute("originUrl");
     if (originUrl === "") return;
@@ -161,7 +158,6 @@ async function printCharacters(charactersUrl: string[]) {
     charactersUrl.forEach(async (endpoint: string) => {
 
         const characterData = await getCharacter(endpoint, undefined)
-        const characterId = characterData.id
         const cardWrapper = document.createElement("div");
         const card = document.createElement("div");
         const img = document.createElement("img");
@@ -173,7 +169,7 @@ async function printCharacters(charactersUrl: string[]) {
         cardsContainer.appendChild(cardWrapper);
 
         card.classList.add("card", "px-0", "h-100");
-        card.setAttribute("characterId", `${characterId}`)
+        card.setAttribute("characterId", `${characterData.id}`)
         card.setAttribute("role", "button");
         card.addEventListener("click", showCharacter);
         cardWrapper.appendChild(card);
@@ -196,6 +192,32 @@ async function printCharacters(charactersUrl: string[]) {
 }
 
 
+async function printEpisodes(episodesUrl: string[]) {
+
+    episodesUrl.forEach(async endpoint => {
+
+        const episodeData = await getSingleEpisode(endpoint, undefined)
+
+        const characterBody = document.querySelector("#character-body")
+        const episodeContainer = document.createElement("div")
+        const title = document.createElement("h5");
+        const code = document.createElement("p");
+
+        episodeContainer.classList.add("col")
+        episodeContainer.setAttribute("role", "button");
+        episodeContainer.setAttribute("episode", `${episodeData.id}`)
+        episodeContainer.addEventListener("click", showEpisode);
+
+        title.innerText = episodeData.name;
+        episodeContainer.appendChild(title);
+        code.innerText = episodeData.episode;
+        episodeContainer.appendChild(code);
+
+        characterBody?.appendChild(episodeContainer);
+    });
+}
+
+
 //MINOR FUNCTIONS
 
 function cleanMain() {
@@ -204,9 +226,11 @@ function cleanMain() {
 }
 
 
-function infiniteScroll(event: Event) {
+function infiniteScroll() {
 
-    //event.preventDefault()
+    let booleanVar = sessionStorage.getItem("fetching")
+    if (booleanVar === "true") return;
+
     const scrollBox = document.querySelector("#scroll-box") as HTMLElement | null;
     if (scrollBox === null) return;
 
@@ -216,37 +240,35 @@ function infiniteScroll(event: Event) {
 
     if (scrollTop + clientHeight >= scrollHeight - 100 /*&& nextPage !== -1*/) {
         refreshSidebar();
-
     };
 }
 
 
 async function refreshSidebar() {
-    console.log("entering function")
+    sessionStorage.setItem("fetching", true.toString())
+    const nextPage = sessionStorage.getItem("nextMenuPage");
     const scrollBox = document.querySelector("#scroll-box") as HTMLElement | null;
     const sideList = document.querySelector("#sidebar-list")
 
-    let pageFilterUrl = ""
-    if (sideList?.childElementCount === 20) {
-        pageFilterUrl = "?page=2"
-    } else if (sideList?.childElementCount === 40) {
-        pageFilterUrl = "?page=3"
-    } else {
-        scrollBox?.removeEventListener("scroll", infiniteScroll)
-        return;
+    if (nextPage !== null) {
+        const data = await getEpisodes(nextPage, undefined)
+        const episodes = data.results
+
+        episodes.forEach(episode => {
+            const li = document.createElement("li")
+            li.classList.add("sidebar-list-element")
+            li.innerText = `${episode.id} - ${episode.name}`
+            li.setAttribute("episode", `${episode.id}`)
+            li.addEventListener("click", showEpisode);
+            sideList?.appendChild(li)
+        });
+
+        if (data.info.next !== null) sessionStorage.setItem("nextMenuPage", data.info.next)
+        else {
+            scrollBox?.removeEventListener("scroll", infiniteScroll)
+            sessionStorage.clear();
+            return;
+        }
     }
-
-    const data = await getEpisodes(undefined, pageFilterUrl)
-
-    console.log("if passed")
-    const episodes = data.results
-
-    episodes.forEach(episode => {
-        const li = document.createElement("li")
-        li.classList.add("sidebar-list-element")
-        li.innerText = `${episode.id} - ${episode.name}`
-        li.setAttribute("episode", `${episode.id}`)
-        li.addEventListener("click", showEpisode);
-        sideList?.appendChild(li)
-    });
+    sessionStorage.setItem("fetching", false.toString())
 }

@@ -8,27 +8,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { getEpisodes, getSingleEpisode, getCharacter, getLocation } from "./APIrequests.js";
-window.addEventListener("load", setSidebar);
-function setSidebar() {
+import { createHeader, createSidebar, createMainContainer } from "./DOMmanipulation.js";
+window.addEventListener("load", setMain);
+function setMain() {
     return __awaiter(this, void 0, void 0, function* () {
+        createHeader();
+        createSidebar();
+        createMainContainer();
         const scrollBox = document.querySelector("#scroll-box");
-        const sideMenu = document.querySelector("#side-menu");
-        const episodeList = document.createElement("ul");
-        const sideFooter = document.querySelector("#sidebar-footer");
-        episodeList.classList.add("sidebar-list");
-        episodeList.id = "sidebar-list";
+        const scrollBoxNav = document.querySelector("#scroll-box-nav");
+        const episodeList = document.querySelector("#sidebar-list");
+        const episodeListNav = document.querySelector("#sidebar-list-nav");
         scrollBox === null || scrollBox === void 0 ? void 0 : scrollBox.addEventListener("scroll", infiniteScroll);
+        scrollBoxNav === null || scrollBoxNav === void 0 ? void 0 : scrollBoxNav.addEventListener("scroll", infiniteScroll);
         const data = yield getEpisodes();
         const episodes = data.results;
         episodes.forEach(episode => {
+            if (episodeList === null || episodeListNav === null)
+                return;
             const li = document.createElement("li");
+            const liNav = document.createElement("li");
             li.classList.add("sidebar-list-element");
+            liNav.classList.add("sidebar-list-element");
             li.innerText = `${episode.id} - ${episode.name}`;
+            liNav.innerText = `${episode.id} - ${episode.name}`;
             li.setAttribute("episode", `${episode.id}`);
+            liNav.setAttribute("episode", `${episode.id}`);
             li.addEventListener("click", showEpisode);
+            liNav.addEventListener("click", showEpisode);
             episodeList.appendChild(li);
-            sideMenu === null || sideMenu === void 0 ? void 0 : sideMenu.appendChild(episodeList);
+            episodeListNav.appendChild(liNav);
         });
+        sessionStorage.setItem("fetching", false.toString());
+        if (data.info.next !== null)
+            sessionStorage.setItem("nextMenuPage", data.info.next);
     });
 }
 function showEpisode() {
@@ -41,12 +54,12 @@ function showEpisode() {
         const episodeData = yield getSingleEpisode(undefined, episodeNumber);
         const episodeTitle = document.createElement("h2");
         const episodeInfo = document.createElement("p");
-        const charactersURL = episodeData.characters;
+        const episodeCharacters = episodeData.characters;
         episodeTitle.innerText = `${episodeNumber} - ${episodeData.name}`;
         episodeInfo.innerText = `${episodeData.air_date} | ${episodeData.episode}`;
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(episodeTitle);
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(episodeInfo);
-        printCharacters(charactersURL);
+        printCharacters(episodeCharacters);
     });
 }
 function showCharacter() {
@@ -58,7 +71,7 @@ function showCharacter() {
         const characterData = yield getCharacter(undefined, selectedCharacterId);
         const origin = characterData.origin.name;
         const originUrl = characterData.origin.url;
-        const episodeList = characterData.episode;
+        const characterEpisodes = characterData.episode;
         const mainContent = document.querySelector("#main-content");
         const characterHeader = document.createElement("div");
         const characterBody = document.createElement("div");
@@ -73,32 +86,19 @@ function showCharacter() {
         img.src = characterData.image;
         characterHeader.appendChild(img);
         characterInfo.classList.add("col-12", "col-sm-12", "col-md-7", "col-lg-8", "col-xl-9");
+        characterHeader.appendChild(characterInfo);
         characterTitle.innerText = characterData.name;
+        characterInfo.appendChild(characterTitle);
         characterDetails.innerText = `${characterData.species} | ${characterData.status} | ${characterData.gender} | `;
+        characterInfo.appendChild(characterDetails);
         clickableSpan.innerText = `${origin}`;
         clickableSpan.setAttribute("originUrl", `${originUrl}`);
-        characterHeader.appendChild(characterInfo);
-        characterInfo.appendChild(characterTitle);
-        characterInfo.appendChild(characterDetails);
-        characterDetails.appendChild(clickableSpan);
         clickableSpan.addEventListener("click", showOrigin);
+        characterDetails.appendChild(clickableSpan);
         characterBody.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-2", "row-cols-xl-4", "g-3", "character-body");
+        characterBody.id = "character-body";
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(characterBody);
-        episodeList.forEach((endpoint) => __awaiter(this, void 0, void 0, function* () {
-            const episodeData = yield getSingleEpisode(endpoint, undefined);
-            const episodeContainer = document.createElement("div");
-            const title = document.createElement("h5");
-            const code = document.createElement("p");
-            episodeContainer.classList.add("col");
-            episodeContainer.setAttribute("role", "button");
-            episodeContainer.setAttribute("episode", `${episodeData.id}`);
-            episodeContainer.addEventListener("click", showEpisode);
-            title.innerText = episodeData.name;
-            episodeContainer.appendChild(title);
-            code.innerText = episodeData.episode;
-            episodeContainer.appendChild(code);
-            characterBody.appendChild(episodeContainer);
-        }));
+        printEpisodes(characterEpisodes);
     });
 }
 function showOrigin() {
@@ -129,7 +129,6 @@ function printCharacters(charactersUrl) {
         mainContent === null || mainContent === void 0 ? void 0 : mainContent.appendChild(cardsContainer);
         charactersUrl.forEach((endpoint) => __awaiter(this, void 0, void 0, function* () {
             const characterData = yield getCharacter(endpoint, undefined);
-            const characterId = characterData.id;
             const cardWrapper = document.createElement("div");
             const card = document.createElement("div");
             const img = document.createElement("img");
@@ -139,7 +138,7 @@ function printCharacters(charactersUrl) {
             cardWrapper.classList.add("card-wrapper", "col", "text-dark");
             cardsContainer.appendChild(cardWrapper);
             card.classList.add("card", "px-0", "h-100");
-            card.setAttribute("characterId", `${characterId}`);
+            card.setAttribute("characterId", `${characterData.id}`);
             card.setAttribute("role", "button");
             card.addEventListener("click", showCharacter);
             cardWrapper.appendChild(card);
@@ -157,11 +156,34 @@ function printCharacters(charactersUrl) {
         }));
     });
 }
+function printEpisodes(episodesUrl) {
+    return __awaiter(this, void 0, void 0, function* () {
+        episodesUrl.forEach((endpoint) => __awaiter(this, void 0, void 0, function* () {
+            const episodeData = yield getSingleEpisode(endpoint, undefined);
+            const characterBody = document.querySelector("#character-body");
+            const episodeContainer = document.createElement("div");
+            const title = document.createElement("h5");
+            const code = document.createElement("p");
+            episodeContainer.classList.add("col");
+            episodeContainer.setAttribute("role", "button");
+            episodeContainer.setAttribute("episode", `${episodeData.id}`);
+            episodeContainer.addEventListener("click", showEpisode);
+            title.innerText = episodeData.name;
+            episodeContainer.appendChild(title);
+            code.innerText = episodeData.episode;
+            episodeContainer.appendChild(code);
+            characterBody === null || characterBody === void 0 ? void 0 : characterBody.appendChild(episodeContainer);
+        }));
+    });
+}
 function cleanMain() {
     const mainContent = document.querySelector("#main-content");
     mainContent === null || mainContent === void 0 ? void 0 : mainContent.replaceChildren();
 }
-function infiniteScroll(event) {
+function infiniteScroll() {
+    let booleanVar = sessionStorage.getItem("fetching");
+    if (booleanVar === "true")
+        return;
     const scrollBox = document.querySelector("#scroll-box");
     if (scrollBox === null)
         return;
@@ -175,31 +197,30 @@ function infiniteScroll(event) {
 }
 function refreshSidebar() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("entering function");
+        sessionStorage.setItem("fetching", true.toString());
+        const nextPage = sessionStorage.getItem("nextMenuPage");
         const scrollBox = document.querySelector("#scroll-box");
         const sideList = document.querySelector("#sidebar-list");
-        let pageFilterUrl = "";
-        if ((sideList === null || sideList === void 0 ? void 0 : sideList.childElementCount) === 20) {
-            pageFilterUrl = "?page=2";
+        if (nextPage !== null) {
+            const data = yield getEpisodes(nextPage, undefined);
+            const episodes = data.results;
+            episodes.forEach(episode => {
+                const li = document.createElement("li");
+                li.classList.add("sidebar-list-element");
+                li.innerText = `${episode.id} - ${episode.name}`;
+                li.setAttribute("episode", `${episode.id}`);
+                li.addEventListener("click", showEpisode);
+                sideList === null || sideList === void 0 ? void 0 : sideList.appendChild(li);
+            });
+            if (data.info.next !== null)
+                sessionStorage.setItem("nextMenuPage", data.info.next);
+            else {
+                scrollBox === null || scrollBox === void 0 ? void 0 : scrollBox.removeEventListener("scroll", infiniteScroll);
+                sessionStorage.clear();
+                return;
+            }
         }
-        else if ((sideList === null || sideList === void 0 ? void 0 : sideList.childElementCount) === 40) {
-            pageFilterUrl = "?page=3";
-        }
-        else {
-            scrollBox === null || scrollBox === void 0 ? void 0 : scrollBox.removeEventListener("scroll", infiniteScroll);
-            return;
-        }
-        const data = yield getEpisodes(undefined, pageFilterUrl);
-        console.log("if passed");
-        const episodes = data.results;
-        episodes.forEach(episode => {
-            const li = document.createElement("li");
-            li.classList.add("sidebar-list-element");
-            li.innerText = `${episode.id} - ${episode.name}`;
-            li.setAttribute("episode", `${episode.id}`);
-            li.addEventListener("click", showEpisode);
-            sideList === null || sideList === void 0 ? void 0 : sideList.appendChild(li);
-        });
+        sessionStorage.setItem("fetching", false.toString());
     });
 }
 //# sourceMappingURL=index.js.map
