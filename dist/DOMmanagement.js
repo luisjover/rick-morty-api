@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { showEpisode, showSeason } from "./principalFunctions.js";
-import { getSeasonsNumber } from "./supportFunctions.js";
+import { getSeasonsNumber, toggleBodyFix } from "./supportFunctions.js";
 export function createHeader() {
     const header = document.querySelector("header");
     const navBar = document.createElement("nav");
@@ -17,15 +17,14 @@ export function createHeader() {
     const toggleButton = document.createElement("button");
     const iconSpan = document.createElement("span");
     const collapseNavbar = document.createElement("div");
-    const scrollBoxNav = document.createElement("div");
     const scrollBoxInnerNav = document.createElement("div");
     const sidebarListNav = document.createElement("ul");
-    navBar.classList.add("navbar", "navbar-expand-lg", "navbar-light", "main-navbar");
+    navBar.classList.add("navbar", "navbar-expand-lg", "navbar-dark", "main-navbar");
     header === null || header === void 0 ? void 0 : header.appendChild(navBar);
     container.classList.add("container-fluid", "header-container");
     navBar.appendChild(container);
-    heading.classList.add("m-auto");
-    heading.innerText = "Rick & Morty";
+    heading.classList.add("m-auto", "header-heading");
+    heading.innerText = "SEASONS";
     container.appendChild(heading);
     toggleButton.classList.add("navbar-toggler");
     toggleButton.type = "button";
@@ -34,18 +33,16 @@ export function createHeader() {
     toggleButton.setAttribute("aria-controls", "#navbar-colapse");
     toggleButton.setAttribute("aria-expanded", "false");
     toggleButton.setAttribute("aria-label", "Toggle navigation");
+    toggleButton.addEventListener("click", toggleBodyFix);
     container.appendChild(toggleButton);
     iconSpan.classList.add("navbar-toggler-icon");
     toggleButton.appendChild(iconSpan);
     collapseNavbar.classList.add("collapse", "navbar-collapse", "collapsable-container");
     collapseNavbar.id = "navbar-colapse";
     container.appendChild(collapseNavbar);
-    scrollBoxNav.classList.add("scrollbox");
-    scrollBoxNav.id = "scroll-box-nav";
-    collapseNavbar.appendChild(scrollBoxNav);
     scrollBoxInnerNav.classList.add("scrollbox-inner");
     scrollBoxInnerNav.id = "side-menu-nav";
-    scrollBoxNav.appendChild(scrollBoxInnerNav);
+    collapseNavbar.appendChild(scrollBoxInnerNav);
     sidebarListNav.classList.add("sidebar-list");
     sidebarListNav.id = "sidebar-list-nav";
     scrollBoxInnerNav.appendChild(sidebarListNav);

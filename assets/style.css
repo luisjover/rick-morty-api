@@ -1,42 +1,48 @@
 @font-face {
-
     font-family: rickymorty;
-
-    src: url(/fonts/get_schwifty.ttf);
-
+    src: url("/fonts/get_schwifty.ttf");
 }
+
+@font-face {
+    font-family: "Roboto";
+    src: url("/fonts/Roboto-Regular.ttf") format("true type");
+    font-style: normal;
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("/fonts/Roboto-Medium.ttf") format("true type");
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("/fonts/Roboto-Bold.ttf") format("true type");
+    font-style: normal;
+    font-weight: 700;
+}
+
 
 body {
     min-height: 100vh;
     background-image: url(/images/bg-space-desktop.png);
     background-size: cover;
     background-attachment: fixed;
-
+    font-family: "Roboto";
 }
 
 main {
     display: grid;
 }
 
-::-webkit-scrollbar {
-    width: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #e89ac7;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
-}
-
 .main-navbar {
     position: relative;
     width: 100%;
     display: none;
-    background-color: rgba(151, 206, 76, .6);
-    padding: 15px 5px;
+    background-color: rgba(232, 154, 199, .6);
+    padding: 20px 5px;
     z-index: 1;
 }
 
@@ -45,14 +51,11 @@ main {
 .collapsable-container {
     position: absolute;
     z-index: 9999;
-    top: 70px;
-    left: 0px;
-    overflow-y: auto;
-    max-height: 100vh;
-    background-color: rgba(151, 206, 76, .8);
-    width: 90%;
-
-    padding-right: 5px;
+    top: 80px;
+    left: 0;
+    background-color: rgba(232, 154, 199, .4);
+    width: 80%;
+    margin: 0 10%;
 }
 
 
@@ -95,6 +98,7 @@ main {
     flex-direction: column;
     align-items: center;
 
+
 }
 
 .scrollbox-inner,
@@ -102,13 +106,28 @@ main {
     visibility: visible;
 }
 
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #e89ac7;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
 .sidebar-list {
     list-style: none;
+    margin-left: 20px;
+
 }
 
 .sidebar-list-element {
     cursor: pointer;
-    padding: 25px 0;
+    padding: 30px 0;
 
 }
 
@@ -192,8 +211,19 @@ main {
         background-image: url(/images/bg-space-mobile.jpg);
     }
 
+    .body-fixed {
+        position: fixed;
+        width: 100%;
+    }
+
+
     .main-navbar {
         display: flex;
+    }
+
+    .header-heading {
+        position: relative;
+        left: 28px;
     }
 
     .sidebar {
@@ -206,17 +236,44 @@ main {
 
     }
 
+    ::-webkit-scrollbar-thumb {
+        background: #97ce4c;
+    }
+
     .sidebar-list {
         list-style: none;
-        /*background-color: #e89ac7;*/
+        position: relative;
+        right: 15px;
+        margin-left: 0;
     }
 
     .main-wrapper {
         left: 0;
         width: 100%;
-
+        min-height: auto;
     }
 
+    .main-content {
+        text-align: center;
+    }
+
+    .cards-container {
+        border-top: 3px solid #97ce4c;
+    }
+
+    .character-header {
+        border-bottom: 3px solid #97ce4c;
+    }
+
+    .character-body {
+        text-align: justify;
+    }
+
+    .clickable-span:hover,
+    .sidebar-list-element:hover,
+    .clickable-episode-title:hover {
+        color: #97ce4c;
+    }
 
 
 

@@ -76,4 +76,8 @@ export function refreshSidebar() {
         sessionStorage.setItem("fetching", false.toString());
     });
 }
+export function toggleBodyFix() {
+    const body = document.querySelector("body");
+    body === null || body === void 0 ? void 0 : body.classList.toggle("body-fixed");
+}
 //# sourceMappingURL=supportFunctions.js.map
