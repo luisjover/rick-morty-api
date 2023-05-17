@@ -7,8 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { showEpisode } from "./principalFunctions";
-import { getEpisodes } from "./APIrequests";
+import { showEpisode } from "./principalFunctions.js";
+import { getEpisodes } from "./APIrequests.js";
 export function cleanMain() {
     const mainContent = document.querySelector("#main-content");
     mainContent === null || mainContent === void 0 ? void 0 : mainContent.replaceChildren();

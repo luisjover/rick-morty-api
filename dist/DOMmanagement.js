@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { showEpisode, showSeason } from "./principalFunctions.js";
-import { getSeasonsNumber } from "./supportFunc.js";
+import { getSeasonsNumber } from "./supportFunctions.js";
 export function createHeader() {
     const header = document.querySelector("header");
     const navBar = document.createElement("nav");
@@ -117,4 +117,4 @@ export function createMainContainer() {
     mainContainer.id = "main-content";
     mainWrapper.appendChild(mainContainer);
 }
-//# sourceMappingURL=DOMmanipulation.js.map
+//# sourceMappingURL=DOMmanagement.js.map

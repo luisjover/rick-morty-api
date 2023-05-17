@@ -8,8 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { getEpisodes } from "./APIrequests.js";
-import { createHeader, createSidebar, createMainContainer, createSideMenu, createSeasonsMenu } from "./mainDOM";
-import { infiniteScroll } from "./supportFunctions";
+import { createHeader, createSidebar, createMainContainer, createSideMenu, createSeasonsMenu } from "./DOMmanagement.js";
+import { infiniteScroll } from "./supportFunctions.js";
 window.addEventListener("load", setMain);
 function setMain() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -17,9 +17,7 @@ function setMain() {
         createSidebar();
         createMainContainer();
         const scrollBox = document.querySelector("#scroll-box");
-        const scrollBoxNav = document.querySelector("#scroll-box-nav");
         scrollBox === null || scrollBox === void 0 ? void 0 : scrollBox.addEventListener("scroll", infiniteScroll);
-        scrollBoxNav === null || scrollBoxNav === void 0 ? void 0 : scrollBoxNav.addEventListener("scroll", infiniteScroll);
         const data = yield getEpisodes();
         const episodes = data.results;
         episodes.forEach(episode => {
