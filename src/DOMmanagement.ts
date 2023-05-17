@@ -1,5 +1,5 @@
 import { showEpisode, showSeason } from "./principalFunctions.js";
-import { getSeasonsNumber, toggleBodyFix } from "./supportFunctions.js";
+import { getSeasonsNumber, toggleBodyFixed } from "./supportFunctions.js";
 import { Episode } from "./types";
 
 
@@ -33,7 +33,7 @@ export function createHeader(): void {
     toggleButton.setAttribute("aria-controls", "#navbar-colapse");
     toggleButton.setAttribute("aria-expanded", "false");
     toggleButton.setAttribute("aria-label", "Toggle navigation");
-    toggleButton.addEventListener("click", toggleBodyFix)
+    toggleButton.addEventListener("click", toggleBodyFixed)
     container.appendChild(toggleButton);
 
     iconSpan.classList.add("navbar-toggler-icon");

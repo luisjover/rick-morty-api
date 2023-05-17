@@ -77,7 +77,7 @@ export async function refreshSidebar(): Promise<void> {
     sessionStorage.setItem("fetching", false.toString())
 }
 
-export function toggleBodyFix() {
+export function toggleBodyFixed() {
     const body = document.querySelector("body");
     body?.classList.toggle("body-fixed")
 }
