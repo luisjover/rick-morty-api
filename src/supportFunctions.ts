@@ -41,7 +41,7 @@ export function infiniteScroll() {
     const scrollHeight = scrollBox.scrollHeight;
     const clientHeight = scrollBox.clientHeight;
 
-    if (scrollTop + clientHeight >= scrollHeight - 100 /*&& nextPage !== -1*/) {
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
         refreshSidebar();
     };
 }
@@ -75,6 +75,7 @@ export async function refreshSidebar(): Promise<void> {
     }
     sessionStorage.setItem("fetching", false.toString());
 }
+
 
 export function toggleBodyFixed() {
     const body = document.querySelector("body") as HTMLElement | null;

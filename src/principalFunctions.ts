@@ -4,7 +4,8 @@ import { cleanMain, removeCharactersEventListeners, removeEpisodesEventListeners
 import { Episode } from "./types";
 
 
-//IN CHARGE OF SHOWING EPISODE ALWAYS REQUIRED ALONG THE PROGRAM BY READING "EPISODE" CUSTOM ATTRIBUTE
+//SHOW FUNCTIONS
+
 export async function showEpisode(this: HTMLElement) {
 
     removeCharactersEventListeners();
@@ -56,7 +57,6 @@ export async function showSeason(this: HTMLElement) {
 
 
 
-//IN CHARGE OF SHOWING SINGLE CHARACTER AND DISPLAY ALL ITS INFORMATION 
 export async function showCharacter(this: HTMLElement) {
 
     removeCharactersEventListeners();

@@ -5,7 +5,6 @@ import { infiniteScroll } from "./supportFunctions.js";
 
 window.addEventListener("load", setMain);
 
-//IN CHARGE OF CREATE AND SHOW FIRST SIDEBAR AND COLLAPSABLE HEADER MENU AND PROPPERLY FULFILL;
 async function setMain(): Promise<void> {
 
     createHeader();
