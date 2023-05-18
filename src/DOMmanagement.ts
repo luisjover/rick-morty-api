@@ -6,7 +6,7 @@ import { Episode } from "./types";
 
 export function createHeader(): void {
 
-    const header = document.querySelector("header")
+    const header = document.querySelector("header") as HTMLElement | null;
     const navBar = document.createElement("nav");
     const container = document.createElement("div");
     const heading = document.createElement("h1");
@@ -33,7 +33,7 @@ export function createHeader(): void {
     toggleButton.setAttribute("aria-controls", "#navbar-colapse");
     toggleButton.setAttribute("aria-expanded", "false");
     toggleButton.setAttribute("aria-label", "Toggle navigation");
-    toggleButton.addEventListener("click", toggleBodyFixed)
+    toggleButton.addEventListener("click", toggleBodyFixed);
     container.appendChild(toggleButton);
 
     iconSpan.classList.add("navbar-toggler-icon");
@@ -55,16 +55,16 @@ export function createHeader(): void {
 }
 
 export async function createSeasonsMenu() {
-    const episodeListNav = document.querySelector("#sidebar-list-nav")
+    const episodeListNav = document.querySelector("#sidebar-list-nav") as HTMLElement | null;
     const img = document.createElement("img");
-    const seasonsNumber = await getSeasonsNumber()
+    const seasonsNumber = await getSeasonsNumber();
     let i = 1;
     while (i <= seasonsNumber) {
         let iWithZero = ('0' + i).slice(-2);
-        const liNav = document.createElement("li")
-        liNav.classList.add("sidebar-list-element")
-        liNav.innerText = `SEASON - ${iWithZero}`
-        liNav.setAttribute("season", `${iWithZero}`)
+        const liNav = document.createElement("li");
+        liNav.classList.add("sidebar-list-element");
+        liNav.innerText = `SEASON - ${iWithZero}`;
+        liNav.setAttribute("season", `${iWithZero}`);
         liNav.addEventListener("click", showSeason);
         episodeListNav?.appendChild(liNav);
         i++;
@@ -80,7 +80,7 @@ export async function createSeasonsMenu() {
 
 
 export function createSidebar() {
-    const main = document.querySelector("main");
+    const main = document.querySelector("main") as HTMLElement | null;
     const sidebar = document.createElement("nav");
     const sidebarHeader = document.createElement("div");
     const heading = document.createElement("h2");
@@ -117,19 +117,19 @@ export function createSidebar() {
 }
 
 export function createSideMenu(episode: Episode) {
-    const episodeList = document.querySelector("#sidebar-list")
-    if (episodeList === null) return
-    const li = document.createElement("li")
-    li.classList.add("sidebar-list-element")
-    li.innerText = `${episode.id} - ${episode.name}`
-    li.setAttribute("episode", `${episode.id}`)
+    const episodeList = document.querySelector("#sidebar-list") as HTMLElement | null;
+    if (episodeList === null) return;
+    const li = document.createElement("li");
+    li.classList.add("sidebar-list-element");
+    li.innerText = `${episode.id} - ${episode.name}`;
+    li.setAttribute("episode", `${episode.id}`);
     li.addEventListener("click", showEpisode);
-    episodeList.appendChild(li)
+    episodeList.appendChild(li);
 }
 
 
 export function createMainContainer() {
-    const main = document.querySelector("main");
+    const main = document.querySelector("main") as HTMLElement | null;
     const mainWrapper = document.createElement("div");
     const mainContainer = document.createElement("div");
     const img = document.createElement("img");

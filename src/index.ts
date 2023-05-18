@@ -12,23 +12,22 @@ async function setMain(): Promise<void> {
     createSidebar();
     createMainContainer();
 
-    const scrollBox = document.querySelector("#scroll-box")
-    //const sideFooter = document.querySelector("#sidebar-footer") as HTMLElement | null;
+    const scrollBox = document.querySelector("#scroll-box") as HTMLElement | null;
 
-    scrollBox?.addEventListener("scroll", infiniteScroll)
+    scrollBox?.addEventListener("scroll", infiniteScroll);
 
-    const data = await getEpisodes()
-    const episodes = data.results
+    const data = await getEpisodes();
+    const episodes = data.results;
 
     episodes.forEach(episode => {
 
-        createSideMenu(episode)
+        createSideMenu(episode);
     });
 
-    createSeasonsMenu()
+    createSeasonsMenu();
 
 
-    sessionStorage.setItem("fetching", false.toString())
-    if (data.info.next !== null) sessionStorage.setItem("nextMenuPage", data.info.next)
+    sessionStorage.setItem("fetching", false.toString());
+    if (data.info.next !== null) sessionStorage.setItem("nextMenuPage", data.info.next);
 
 }

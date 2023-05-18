@@ -4,7 +4,7 @@ import { getEpisodes } from "./APIrequests.js";
 
 
 export function cleanMain() {
-    const mainContent = document.querySelector("#main-content");
+    const mainContent = document.querySelector("#main-content") as HTMLElement | null;
     mainContent?.replaceChildren();
 }
 
@@ -19,7 +19,7 @@ export async function getSeasonsNumber(): Promise<number> {
         let seasonWithZero = ('0' + currentSeason).slice(-2);
         let url = `?episode=S${seasonWithZero}`;
 
-        const data = await getEpisodes(undefined, url)
+        const data = await getEpisodes(undefined, url);
         if (data.results) {
             currentSeason++;
             totalSeasons += 1;
@@ -31,7 +31,7 @@ export async function getSeasonsNumber(): Promise<number> {
 
 export function infiniteScroll() {
 
-    let booleanVar = sessionStorage.getItem("fetching")
+    let booleanVar = sessionStorage.getItem("fetching");
     if (booleanVar === "true") return;
 
     const scrollBox = document.querySelector("#scroll-box") as HTMLElement | null;
@@ -48,37 +48,37 @@ export function infiniteScroll() {
 
 
 export async function refreshSidebar(): Promise<void> {
-    sessionStorage.setItem("fetching", true.toString())
+    sessionStorage.setItem("fetching", true.toString());
     const nextPage = sessionStorage.getItem("nextMenuPage");
     const scrollBox = document.querySelector("#scroll-box") as HTMLElement | null;
-    const sideList = document.querySelector("#sidebar-list")
+    const sideList = document.querySelector("#sidebar-list") as HTMLElement | null;
 
     if (nextPage !== null) {
-        const data = await getEpisodes(nextPage, undefined)
-        const episodes = data.results
+        const data = await getEpisodes(nextPage, undefined);
+        const episodes = data.results;
 
         episodes.forEach(episode => {
-            const li = document.createElement("li")
-            li.classList.add("sidebar-list-element")
-            li.innerText = `${episode.id} - ${episode.name}`
-            li.setAttribute("episode", `${episode.id}`)
+            const li = document.createElement("li");
+            li.classList.add("sidebar-list-element");
+            li.innerText = `${episode.id} - ${episode.name}`;
+            li.setAttribute("episode", `${episode.id}`);
             li.addEventListener("click", showEpisode);
             sideList?.appendChild(li)
         });
 
-        if (data.info.next !== null) sessionStorage.setItem("nextMenuPage", data.info.next)
+        if (data.info.next !== null) sessionStorage.setItem("nextMenuPage", data.info.next);
         else {
-            scrollBox?.removeEventListener("scroll", infiniteScroll)
+            scrollBox?.removeEventListener("scroll", infiniteScroll);
             sessionStorage.clear();
             return;
         }
     }
-    sessionStorage.setItem("fetching", false.toString())
+    sessionStorage.setItem("fetching", false.toString());
 }
 
 export function toggleBodyFixed() {
-    const body = document.querySelector("body");
-    body?.classList.toggle("body-fixed")
+    const body = document.querySelector("body") as HTMLElement | null;
+    body?.classList.toggle("body-fixed");
 }
 
 
@@ -97,7 +97,7 @@ export function removeCharactersEventListeners() {
 }
 
 export function removeOriginEventListener() {
-    const span = document.querySelector(".clickable-span");
+    const span = document.querySelector(".clickable-span") as HTMLElement | null;
     if (span === null) return;
     span.removeEventListener("click", showOrigin);
 }

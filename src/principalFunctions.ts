@@ -8,7 +8,7 @@ import { Episode } from "./types";
 export async function showEpisode(this: HTMLElement) {
 
     removeCharactersEventListeners();
-    removeEpisodesEventListeners()
+    removeEpisodesEventListeners();
     cleanMain();
 
     const episodeNumber = this.getAttribute("episode");
@@ -34,7 +34,7 @@ export async function showSeason(this: HTMLElement) {
     cleanMain();
 
     const season = this.getAttribute("season");
-    const mainContent = document.querySelector("#main-content");
+    const mainContent = document.querySelector("#main-content") as HTMLElement | null;
     const seasonTitle = document.createElement("h2");
     const seasonInfo = document.createElement("p");
     const seasonEpisodes = document.createElement("div");
@@ -60,7 +60,7 @@ export async function showSeason(this: HTMLElement) {
 export async function showCharacter(this: HTMLElement) {
 
     removeCharactersEventListeners();
-    cleanMain()
+    cleanMain();
 
     const selectedCharacterId = this.getAttribute("characterId");
     if (selectedCharacterId === null) return;
@@ -72,37 +72,37 @@ export async function showCharacter(this: HTMLElement) {
     const characterEpisodes = characterData.episode;
 
     const mainContent = document.querySelector("#main-content") as HTMLElement | null;
-    const characterHeader = document.createElement("div")
-    const characterBody = document.createElement("div")
-    const img = document.createElement("img")
-    const characterInfo = document.createElement("div")
-    const characterTitle = document.createElement("h2")
-    const characterDetails = document.createElement("p")
-    const clickableSpan = document.createElement("span")
+    const characterHeader = document.createElement("div");
+    const characterBody = document.createElement("div");
+    const img = document.createElement("img");
+    const characterInfo = document.createElement("div");
+    const characterTitle = document.createElement("h2");
+    const characterDetails = document.createElement("p");
+    const clickableSpan = document.createElement("span");
 
-    characterHeader.classList.add("row", "g-3", "character-header")
+    characterHeader.classList.add("row", "g-3", "character-header");
     mainContent?.appendChild(characterHeader);
 
-    img.classList.add("character-main-img", "col-12", "col-sm-12", "col-md-4", "col-lg-4", "col-xl-4")
+    img.classList.add("character-main-img", "col-12", "col-sm-12", "col-md-4", "col-lg-4", "col-xl-4");
     img.src = characterData.image;
-    characterHeader.appendChild(img)
+    characterHeader.appendChild(img);
 
-    characterInfo.classList.add("col-12", "col-sm-12", "col-md-7", "col-lg-7", "col-xl-7")
-    characterHeader.appendChild(characterInfo)
+    characterInfo.classList.add("col-12", "col-sm-12", "col-md-7", "col-lg-7", "col-xl-7");
+    characterHeader.appendChild(characterInfo);
 
-    characterTitle.innerText = characterData.name
-    characterInfo.appendChild(characterTitle)
+    characterTitle.innerText = characterData.name;
+    characterInfo.appendChild(characterTitle);
 
-    characterDetails.innerText = `${characterData.species} | ${characterData.status} | ${characterData.gender} | `
-    characterInfo.appendChild(characterDetails)
+    characterDetails.innerText = `${characterData.species} | ${characterData.status} | ${characterData.gender} | `;
+    characterInfo.appendChild(characterDetails);
 
     clickableSpan.innerText = origin;
     clickableSpan.classList.add("clickable-span");
     clickableSpan.setAttribute("originUrl", originUrl);
-    clickableSpan.addEventListener("click", showOrigin)
-    characterDetails.appendChild(clickableSpan)
+    clickableSpan.addEventListener("click", showOrigin);
+    characterDetails.appendChild(clickableSpan);
 
-    characterBody.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-2", "row-cols-xl-4", "g-3", "character-body")
+    characterBody.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-2", "row-cols-xl-4", "g-3", "character-body");
     characterBody.id = "character-body";
     mainContent?.appendChild(characterBody);
 
@@ -117,23 +117,23 @@ export async function showOrigin(this: HTMLElement) {
     if (originUrl === "") return;
     if (originUrl === null) return;
 
-    const mainContent = document.querySelector("#main-content")
+    const mainContent = document.querySelector("#main-content") as HTMLElement | null;
 
-    removeEpisodesEventListeners()
+    removeEpisodesEventListeners();
     cleanMain();
 
-    const originData = await getLocation(originUrl)
+    const originData = await getLocation(originUrl);
 
-    const residents = originData.residents
+    const residents = originData.residents;
 
-    const title = document.createElement("h2")
-    const originInfo = document.createElement("p")
+    const title = document.createElement("h2");
+    const originInfo = document.createElement("p");
 
-    title.innerText = originData.name
-    originInfo.innerText = `${originData.type} | ${originData.dimension}`
+    title.innerText = originData.name;
+    originInfo.innerText = `${originData.type} | ${originData.dimension}`;
 
-    mainContent?.appendChild(title)
-    mainContent?.appendChild(originInfo)
+    mainContent?.appendChild(title);
+    mainContent?.appendChild(originInfo);
 
     printCharacters(residents);
 }
@@ -142,14 +142,14 @@ export async function showOrigin(this: HTMLElement) {
 //PRINT FUNCTIONS
 
 export async function printCharacters(charactersUrl: string[]) {
-    const mainContent = document.querySelector("#main-content")
-    const cardsContainer = document.createElement("div")
-    cardsContainer.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-3", "row-cols-xl-4", "g-3", "cards-container")
-    mainContent?.appendChild(cardsContainer)
+    const mainContent = document.querySelector("#main-content") as HTMLElement | null;
+    const cardsContainer = document.createElement("div");
+    cardsContainer.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-3", "row-cols-xl-4", "g-3", "cards-container");
+    mainContent?.appendChild(cardsContainer);
 
     charactersUrl.forEach(async (endpoint: string) => {
 
-        const characterData = await getCharacter(endpoint, undefined)
+        const characterData = await getCharacter(endpoint, undefined);
         const cardWrapper = document.createElement("div");
         const card = document.createElement("div");
         const img = document.createElement("img");
@@ -177,8 +177,8 @@ export async function printCharacters(charactersUrl: string[]) {
         cardTitle.innerText = characterData.name;
         cardBody.appendChild(cardTitle);
 
-        cardDetails.classList.add("card-text")
-        cardDetails.innerText = `${characterData.species} | ${characterData.status}`
+        cardDetails.classList.add("card-text");
+        cardDetails.innerText = `${characterData.species} | ${characterData.status}`;
         cardBody.appendChild(cardDetails);
     });
 }
@@ -188,14 +188,14 @@ async function printEpisodes(episodesUrl: string[]) {
 
     episodesUrl.forEach(async endpoint => {
 
-        const episodeData = await getSingleEpisode(endpoint, undefined)
+        const episodeData = await getSingleEpisode(endpoint, undefined);
 
-        const characterBody = document.querySelector("#character-body")
-        const episodeContainer = document.createElement("div")
+        const characterBody = document.querySelector("#character-body") as HTMLElement | null;
+        const episodeContainer = document.createElement("div");
         const title = document.createElement("h5");
         const code = document.createElement("p");
 
-        episodeContainer.classList.add("col")
+        episodeContainer.classList.add("col");
 
         title.innerText = `${episodeData.id}. ${episodeData.name}`;
         title.classList.add("clickable-episode-title");
@@ -217,15 +217,15 @@ async function printSeasonEpisodes(episodeList: Episode[]) {
 
 
     episodeList.forEach(async episode => {
-        const url = episode.url
-        const episodeData = await getSingleEpisode(url, undefined)
+        const url = episode.url;
+        const episodeData = await getSingleEpisode(url, undefined);
 
-        const seasonEpisodes = document.querySelector("#season-episodes")
-        const episodeContainer = document.createElement("div")
+        const seasonEpisodes = document.querySelector("#season-episodes") as HTMLElement | null;
+        const episodeContainer = document.createElement("div");
         const title = document.createElement("h5");
         const code = document.createElement("p");
 
-        episodeContainer.classList.add("col")
+        episodeContainer.classList.add("col");
 
         title.innerText = `${episodeData.id}. ${episodeData.name}`;
         title.classList.add("clickable-episode-title");
@@ -237,6 +237,6 @@ async function printSeasonEpisodes(episodeList: Episode[]) {
         code.innerText = episodeData.episode;
         episodeContainer.appendChild(code);
 
-        seasonEpisodes?.appendChild(episodeContainer); TextMetrics
+        seasonEpisodes?.appendChild(episodeContainer);
     });
 }
