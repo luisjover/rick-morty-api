@@ -51,11 +51,19 @@ main {
 .collapsable-container {
     position: absolute;
     z-index: 9999;
-    top: 80px;
+    top: 110px;
     left: 0;
-    background-color: rgba(232, 154, 199, .4);
-    width: 80%;
-    margin: 0 10%;
+    background-color: rgba(232, 154, 199, .9);
+    width: 84%;
+    margin: 0 8%;
+    border: 3px solid purple;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    filter: drop-shadow(0 0 40px #97ce4c);
+    -webkit-filter: drop-shadow(0 0 40px #97ce4c);
 }
 
 
@@ -156,6 +164,11 @@ main {
     padding: 40px;
 }
 
+.main-img {
+    height: 680px;
+    margin-left: 165px;
+}
+
 .cards-container {
     margin-top: 50px;
     border-top: 3px solid #e89ac7;
@@ -167,6 +180,10 @@ main {
 
 .card {
     border: none;
+}
+
+.card:hover {
+    box-shadow: 0 0 40px #97ce4c;
 }
 
 
@@ -196,12 +213,37 @@ main {
 }
 
 
+@media only screen and (max-width: 1360px) {
+
+    .main-img {
+        height: 500px;
+        margin-top: 100px;
+        margin-left: 170px;
+    }
 
 
+}
 
 
+@media only screen and (max-width: 1100px) {
+
+    .main-img {
+        margin-top: 100px;
+        margin-left: 60px;
+    }
 
 
+}
+
+
+@media only screen and (max-width: 900px) {
+
+    .main-img {
+        display: none;
+    }
+
+
+}
 
 
 
@@ -236,6 +278,7 @@ main {
 
     }
 
+
     ::-webkit-scrollbar-thumb {
         background: #97ce4c;
     }
@@ -245,6 +288,22 @@ main {
         position: relative;
         right: 15px;
         margin-left: 0;
+        margin-top: 30px;
+    }
+
+    .sidebar-list-element {
+        padding-left: 40px;
+    }
+
+    .mobile-menu-img {
+        height: 240px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .mobile-menu-img:hover {
+        filter: drop-shadow(0 0 40px #97ce4c);
+        -webkit-filter: drop-shadow(0 0 40px #97ce4c);
     }
 
     .main-wrapper {
@@ -260,6 +319,11 @@ main {
     .cards-container {
         border-top: 3px solid #97ce4c;
     }
+
+    .card:hover {
+        box-shadow: 0 0 40px #e89ac7;
+    }
+
 
     .character-header {
         border-bottom: 3px solid #97ce4c;

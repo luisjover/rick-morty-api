@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { showEpisode } from "./principalFunctions.js";
+import { showEpisode, showCharacter, showOrigin } from "./principalFunctions.js";
 import { getEpisodes } from "./APIrequests.js";
 export function cleanMain() {
     const mainContent = document.querySelector("#main-content");
@@ -29,7 +29,6 @@ export function getSeasonsNumber() {
             else
                 finished = true;
         }
-        console.log(totalSeasons);
         return totalSeasons;
     });
 }
@@ -76,8 +75,26 @@ export function refreshSidebar() {
         sessionStorage.setItem("fetching", false.toString());
     });
 }
-export function toggleBodyFix() {
+export function toggleBodyFixed() {
     const body = document.querySelector("body");
     body === null || body === void 0 ? void 0 : body.classList.toggle("body-fixed");
+}
+export function removeEpisodesEventListeners() {
+    const episodes = document.querySelectorAll(".clickable-episode-title");
+    if (episodes === null)
+        return;
+    episodes.forEach(episode => episode.removeEventListener("click", showEpisode));
+}
+export function removeCharactersEventListeners() {
+    const cards = document.querySelectorAll(".card");
+    if (cards === null)
+        return;
+    cards.forEach(card => card.removeEventListener("click", showCharacter));
+}
+export function removeOriginEventListener() {
+    const span = document.querySelector(".clickable-span");
+    if (span === null)
+        return;
+    span.removeEventListener("click", showOrigin);
 }
 //# sourceMappingURL=supportFunctions.js.map

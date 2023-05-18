@@ -1,10 +1,10 @@
 export type Character = {
     id: number,
     name: string,
-    status: string,
+    status: CharacterStatus,
     species: string,
     type: string,
-    gender: string,
+    gender: CharacterGender,
     origin: CharacterLocation,
     location: CharacterLocation,
     image: string,
@@ -51,4 +51,17 @@ type Information = {
     pages: number,
     next: string | null,
     prev: string | null
+}
+
+enum CharacterStatus {
+    "Alive",
+    "Dead",
+    "unknown"
+}
+
+enum CharacterGender {
+    "Female",
+    "Male",
+    "Genderless",
+    "unknown"
 }

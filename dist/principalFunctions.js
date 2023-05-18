@@ -8,9 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { getEpisodes, getSingleEpisode, getCharacter, getLocation } from "./APIrequests.js";
-import { cleanMain } from "./supportFunctions.js";
+import { cleanMain, removeCharactersEventListeners, removeEpisodesEventListeners } from "./supportFunctions.js";
 export function showEpisode() {
     return __awaiter(this, void 0, void 0, function* () {
+        removeCharactersEventListeners();
+        removeEpisodesEventListeners();
         cleanMain();
         const episodeNumber = this.getAttribute("episode");
         const mainContent = document.querySelector("#main-content");
@@ -47,8 +49,9 @@ export function showSeason() {
         printSeasonEpisodes(episodes);
     });
 }
-function showCharacter() {
+export function showCharacter() {
     return __awaiter(this, void 0, void 0, function* () {
+        removeCharactersEventListeners();
         cleanMain();
         const selectedCharacterId = this.getAttribute("characterId");
         if (selectedCharacterId === null)
@@ -87,7 +90,7 @@ function showCharacter() {
         printEpisodes(characterEpisodes);
     });
 }
-function showOrigin() {
+export function showOrigin() {
     return __awaiter(this, void 0, void 0, function* () {
         const originUrl = this.getAttribute("originUrl");
         if (originUrl === "")
@@ -95,6 +98,7 @@ function showOrigin() {
         if (originUrl === null)
             return;
         const mainContent = document.querySelector("#main-content");
+        removeEpisodesEventListeners();
         cleanMain();
         const originData = yield getLocation(originUrl);
         const residents = originData.residents;
@@ -107,7 +111,7 @@ function showOrigin() {
         printCharacters(residents);
     });
 }
-function printCharacters(charactersUrl) {
+export function printCharacters(charactersUrl) {
     return __awaiter(this, void 0, void 0, function* () {
         const mainContent = document.querySelector("#main-content");
         const cardsContainer = document.createElement("div");

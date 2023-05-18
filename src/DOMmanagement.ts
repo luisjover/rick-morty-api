@@ -56,6 +56,7 @@ export function createHeader(): void {
 
 export async function createSeasonsMenu() {
     const episodeListNav = document.querySelector("#sidebar-list-nav")
+    const img = document.createElement("img");
     const seasonsNumber = await getSeasonsNumber()
     let i = 1;
     while (i <= seasonsNumber) {
@@ -69,6 +70,10 @@ export async function createSeasonsMenu() {
         i++;
     }
 
+    img.classList.add("mobile-menu-img");
+    img.src = "/images/picklerick.png";
+    img.setAttribute("alt", "Pickle-Riiiick image");
+    episodeListNav?.appendChild(img);
 
 
 }
@@ -127,6 +132,7 @@ export function createMainContainer() {
     const main = document.querySelector("main");
     const mainWrapper = document.createElement("div");
     const mainContainer = document.createElement("div");
+    const img = document.createElement("img");
 
     mainWrapper.classList.add("main-wrapper");
     mainWrapper.id = "main-wrapper";
@@ -135,5 +141,10 @@ export function createMainContainer() {
     mainContainer.classList.add("container", "main-content");
     mainContainer.id = "main-content";
     mainWrapper.appendChild(mainContainer);
+
+    img.classList.add("main-img");
+    img.src = "/images/portalrym.png";
+    img.setAttribute("alt", "Rick & Morty - Interdimensional Portal Image");
+    mainContainer.appendChild(img);
 
 }

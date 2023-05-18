@@ -1,5 +1,5 @@
 
-import { showEpisode } from "./principalFunctions.js";
+import { showEpisode, showCharacter, showOrigin } from "./principalFunctions.js";
 import { getEpisodes } from "./APIrequests.js";
 
 
@@ -25,7 +25,6 @@ export async function getSeasonsNumber(): Promise<number> {
             totalSeasons += 1;
         } else finished = true;
     }
-    console.log(totalSeasons)
     return totalSeasons;
 }
 
@@ -80,4 +79,25 @@ export async function refreshSidebar(): Promise<void> {
 export function toggleBodyFixed() {
     const body = document.querySelector("body");
     body?.classList.toggle("body-fixed")
+}
+
+
+//EVENT LISTENERS REMOVING
+
+export function removeEpisodesEventListeners() {
+    const episodes: NodeListOf<HTMLDivElement> | null = document.querySelectorAll(".clickable-episode-title");
+    if (episodes === null) return;
+    episodes.forEach(episode => episode.removeEventListener("click", showEpisode));
+}
+
+export function removeCharactersEventListeners() {
+    const cards: NodeListOf<HTMLDivElement> | null = document.querySelectorAll(".card");
+    if (cards === null) return;
+    cards.forEach(card => card.removeEventListener("click", showCharacter));
+}
+
+export function removeOriginEventListener() {
+    const span = document.querySelector(".clickable-span");
+    if (span === null) return;
+    span.removeEventListener("click", showOrigin);
 }

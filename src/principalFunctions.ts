@@ -1,29 +1,31 @@
 
 import { getEpisodes, getSingleEpisode, getCharacter, getLocation } from "./APIrequests.js";
-import { cleanMain } from "./supportFunctions.js";
+import { cleanMain, removeCharactersEventListeners, removeEpisodesEventListeners } from "./supportFunctions.js";
 import { Episode } from "./types";
 
 
 //IN CHARGE OF SHOWING EPISODE ALWAYS REQUIRED ALONG THE PROGRAM BY READING "EPISODE" CUSTOM ATTRIBUTE
 export async function showEpisode(this: HTMLElement) {
 
-    cleanMain()
+    removeCharactersEventListeners();
+    removeEpisodesEventListeners()
+    cleanMain();
 
-    const episodeNumber = this.getAttribute("episode")
-    const mainContent = document.querySelector("#main-content")
+    const episodeNumber = this.getAttribute("episode");
+    const mainContent = document.querySelector("#main-content") as HTMLElement | null;
 
     if (episodeNumber === null) return;
-    const episodeData = await getSingleEpisode(undefined, episodeNumber)
+    const episodeData = await getSingleEpisode(undefined, episodeNumber);
 
-    const episodeTitle = document.createElement("h2")
-    const episodeInfo = document.createElement("p")
+    const episodeTitle = document.createElement("h2");
+    const episodeInfo = document.createElement("p");
     const episodeCharacters = episodeData.characters
-    episodeTitle.innerText = `${episodeNumber} - ${episodeData.name}`
-    episodeInfo.innerText = `${episodeData.air_date} | ${episodeData.episode}`
-    mainContent?.appendChild(episodeTitle)
-    mainContent?.appendChild(episodeInfo)
+    episodeTitle.innerText = `${episodeNumber} - ${episodeData.name}`;
+    episodeInfo.innerText = `${episodeData.air_date} | ${episodeData.episode}`;
+    mainContent?.appendChild(episodeTitle);
+    mainContent?.appendChild(episodeInfo);
 
-    printCharacters(episodeCharacters)
+    printCharacters(episodeCharacters);
 }
 
 
@@ -32,42 +34,44 @@ export async function showSeason(this: HTMLElement) {
     cleanMain();
 
     const season = this.getAttribute("season");
-    const mainContent = document.querySelector("#main-content")
-    const seasonTitle = document.createElement("h2")
-    const seasonInfo = document.createElement("p")
+    const mainContent = document.querySelector("#main-content");
+    const seasonTitle = document.createElement("h2");
+    const seasonInfo = document.createElement("p");
     const seasonEpisodes = document.createElement("div");
 
-    seasonTitle.innerText = `SEASON - ${season}`
-    mainContent?.appendChild(seasonTitle)
-    seasonInfo.innerText = `S${season} | Rick & Morty`
-    mainContent?.appendChild(seasonInfo)
+    seasonTitle.innerText = `SEASON - ${season}`;
+    mainContent?.appendChild(seasonTitle);
+    seasonInfo.innerText = `S${season} | Rick & Morty`;
+    mainContent?.appendChild(seasonInfo);
 
-    seasonEpisodes.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-2", "row-cols-xl-4", "g-3", "character-body")
+    seasonEpisodes.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-2", "row-cols-xl-4", "g-3", "character-body");
     seasonEpisodes.id = "season-episodes";
     mainContent?.appendChild(seasonEpisodes);
 
-    const data = await getEpisodes(undefined, `?episode=S${season}`)
-    const episodes = data.results
+    const data = await getEpisodes(undefined, `?episode=S${season}`);
+    const episodes = data.results;
 
-    printSeasonEpisodes(episodes)
+    printSeasonEpisodes(episodes);
 }
 
 
 
 //IN CHARGE OF SHOWING SINGLE CHARACTER AND DISPLAY ALL ITS INFORMATION 
-async function showCharacter(this: HTMLElement) {
+export async function showCharacter(this: HTMLElement) {
+
+    removeCharactersEventListeners();
     cleanMain()
 
-    const selectedCharacterId = this.getAttribute("characterId")
+    const selectedCharacterId = this.getAttribute("characterId");
     if (selectedCharacterId === null) return;
 
-    const characterData = await getCharacter(undefined, selectedCharacterId)
+    const characterData = await getCharacter(undefined, selectedCharacterId);
 
-    const origin = characterData.origin.name
-    const originUrl = characterData.origin.url
-    const characterEpisodes = characterData.episode
+    const origin = characterData.origin.name;
+    const originUrl = characterData.origin.url;
+    const characterEpisodes = characterData.episode;
 
-    const mainContent = document.querySelector("#main-content")
+    const mainContent = document.querySelector("#main-content") as HTMLElement | null;
     const characterHeader = document.createElement("div")
     const characterBody = document.createElement("div")
     const img = document.createElement("img")
@@ -107,7 +111,7 @@ async function showCharacter(this: HTMLElement) {
 }
 
 
-async function showOrigin(this: HTMLElement) {
+export async function showOrigin(this: HTMLElement) {
 
     const originUrl = this.getAttribute("originUrl");
     if (originUrl === "") return;
@@ -115,6 +119,7 @@ async function showOrigin(this: HTMLElement) {
 
     const mainContent = document.querySelector("#main-content")
 
+    removeEpisodesEventListeners()
     cleanMain();
 
     const originData = await getLocation(originUrl)
@@ -136,7 +141,7 @@ async function showOrigin(this: HTMLElement) {
 
 //PRINT FUNCTIONS
 
-async function printCharacters(charactersUrl: string[]) {
+export async function printCharacters(charactersUrl: string[]) {
     const mainContent = document.querySelector("#main-content")
     const cardsContainer = document.createElement("div")
     cardsContainer.classList.add("row", "row-cols-1", "row-cols-sm-1", "row-cols-md-2", "row-cols-lg-3", "row-cols-xl-4", "g-3", "cards-container")

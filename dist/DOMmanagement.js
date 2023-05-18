@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { showEpisode, showSeason } from "./principalFunctions.js";
-import { getSeasonsNumber, toggleBodyFix } from "./supportFunctions.js";
+import { getSeasonsNumber, toggleBodyFixed } from "./supportFunctions.js";
 export function createHeader() {
     const header = document.querySelector("header");
     const navBar = document.createElement("nav");
@@ -33,7 +33,7 @@ export function createHeader() {
     toggleButton.setAttribute("aria-controls", "#navbar-colapse");
     toggleButton.setAttribute("aria-expanded", "false");
     toggleButton.setAttribute("aria-label", "Toggle navigation");
-    toggleButton.addEventListener("click", toggleBodyFix);
+    toggleButton.addEventListener("click", toggleBodyFixed);
     container.appendChild(toggleButton);
     iconSpan.classList.add("navbar-toggler-icon");
     toggleButton.appendChild(iconSpan);
@@ -50,6 +50,7 @@ export function createHeader() {
 export function createSeasonsMenu() {
     return __awaiter(this, void 0, void 0, function* () {
         const episodeListNav = document.querySelector("#sidebar-list-nav");
+        const img = document.createElement("img");
         const seasonsNumber = yield getSeasonsNumber();
         let i = 1;
         while (i <= seasonsNumber) {
@@ -62,6 +63,10 @@ export function createSeasonsMenu() {
             episodeListNav === null || episodeListNav === void 0 ? void 0 : episodeListNav.appendChild(liNav);
             i++;
         }
+        img.classList.add("mobile-menu-img");
+        img.src = "/images/picklerick.png";
+        img.setAttribute("alt", "Pickle-Riiiick image");
+        episodeListNav === null || episodeListNav === void 0 ? void 0 : episodeListNav.appendChild(img);
     });
 }
 export function createSidebar() {
@@ -107,11 +112,16 @@ export function createMainContainer() {
     const main = document.querySelector("main");
     const mainWrapper = document.createElement("div");
     const mainContainer = document.createElement("div");
+    const img = document.createElement("img");
     mainWrapper.classList.add("main-wrapper");
     mainWrapper.id = "main-wrapper";
     main === null || main === void 0 ? void 0 : main.appendChild(mainWrapper);
     mainContainer.classList.add("container", "main-content");
     mainContainer.id = "main-content";
     mainWrapper.appendChild(mainContainer);
+    img.classList.add("main-img");
+    img.src = "/images/portalrym.png";
+    img.setAttribute("alt", "Rick & Morty - Interdimensional Portal Image");
+    mainContainer.appendChild(img);
 }
 //# sourceMappingURL=DOMmanagement.js.map
