@@ -186,7 +186,6 @@ function printSeasonEpisodes(episodeList) {
             code.innerText = episodeData.episode;
             episodeContainer.appendChild(code);
             seasonEpisodes === null || seasonEpisodes === void 0 ? void 0 : seasonEpisodes.appendChild(episodeContainer);
-            TextMetrics;
         }));
     });
 }
